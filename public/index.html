@@ -1,1 +1,76 @@
+<!DOCTYPE html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><title>Тренажёр: перевод единиц</title><style>
+:root{--bg:#f6f7fb;--c:#fff;--t:#1d2433;--m:#667085;--a:#2f6fed;--ok:#1a9e55;--no:#d33;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#12151c;--c:#1c2130;--t:#e8ebf3;--m:#9aa3b5;--a:#6b9bff;--ok:#43c383;--no:#ff6b6b}}
+:root[data-theme="dark"]{--bg:#12151c;--c:#1c2130;--t:#e8ebf3;--m:#9aa3b5;--a:#6b9bff;--ok:#43c383;--no:#ff6b6b}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;background:var(--bg);color:var(--t);font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+.w{max-width:620px;margin:0 auto;padding:16px}.card{background:var(--c);border-radius:14px;padding:18px;box-shadow:0 1px 6px #0002}
+button{font:inherit;background:var(--a);color:#fff;border:0;border-radius:10px;padding:10px 18px;cursor:pointer;margin:6px 6px 0 0}button.g{background:transparent;color:var(--a);border:1px solid var(--a);padding:4px 12px}
+input[type=text]{font:inherit;padding:9px;border:1px solid var(--m);border-radius:8px;background:var(--bg);color:var(--t);width:8em;max-width:40%}
+.bar{height:8px;background:var(--bg);border-radius:6px;overflow:hidden;margin:8px 0}.bar i{display:block;height:100%;background:var(--a)}
+.q{font-size:1.2em;margin:14px 0}.ok{color:var(--ok)}.no{color:var(--no)}.ex{background:var(--bg);padding:10px;border-radius:8px}.s{color:var(--m);font-size:.9em}
+table{width:100%;border-collapse:collapse}td{padding:3px 0}
+</style></head><body><div class="w"><div id="app"></div></div><script>
+const BONUS=[[60,1],[80,2],[100,3]]; // [процент выполнения, бонусные баллы] — измените под себя
+let L='ru',S=null;
+const T={ru:{t:'Тренажёр: перевод единиц',nm:'Фамилия и имя',nn:'Введите фамилию и имя',hn:'Показывать разбор ошибок',go:'Начать',chk:'Проверить',nx:'Дальше',ok:'Верно!',bad:'Неверно. Правильный ответ: ',
+b:['Стандартный вид','Приставки','Перевод в СИ','Цена деления и погрешность','Объём тела (вытеснение)'],so:'значит',tip:'Можно писать так: 8·10^-6 или 0,000008',
+q1a:x=>`Запишите число ${x} в стандартном виде a · 10ⁿ (1 ≤ a < 10)`,q1b:x=>`Запишите число ${x} в обычном виде`,cv:'Переведите:',
+s1:k=>`Переносим запятую к первой значащей цифре: на ${Math.abs(k)} зн. ${k>0?'влево':'вправо'}, значит n = ${k}`,s2:k=>`n = ${k}: запятая сдвигается ${k>0?'вправо':'влево'} на ${Math.abs(k)} зн.`,
+res:'Результат',tot:'Итого',bon:'Бонус',shot:'Сделайте скриншот и покажите учителю',again:'Заново',ch:'Шпаргалка',
+sh:['к (кило) = 1000','М (мега) = 1 000 000','д (деци) = 0,1','с (санти) = 0,01','м (милли) = 0,001','мк (микро) = 0,000001','1 мл = 1 см³ = 0,000001 м³','1 т = 1000 кг, 1 кг = 1000 г']},
+kz:{t:'Тренажер: бірліктерді түрлендіру',nm:'Аты-жөні',nn:'Аты-жөніңізді жазыңыз',hn:'Қателер талдауын көрсету',go:'Бастау',chk:'Тексеру',nx:'Келесі',ok:'Дұрыс!',bad:'Қате. Дұрыс жауап: ',
+b:['Стандартты түр','Қосымшалар','ХБЖ-ге түрлендіру','Бөлік құны және қателік','Дене көлемі (ығыстыру)'],so:'демек',tip:'Былай жазуға болады: 8·10^-6 немесе 0,000008',
+q1a:x=>`${x} санын стандартты түрде жазыңыз a · 10ⁿ (1 ≤ a < 10)`,q1b:x=>`${x} санын қарапайым түрде жазыңыз`,cv:'Түрлендіріңіз:',
+s1:k=>`Үтірді бірінші мәнді цифрға дейін жылжытамыз: ${Math.abs(k)} орын ${k>0?'солға':'оңға'}, демек n = ${k}`,s2:k=>`n = ${k}: үтір ${Math.abs(k)} орын ${k>0?'оңға':'солға'} жылжиды`,
+res:'Нәтиже',tot:'Барлығы',bon:'Бонус',shot:'Скриншот жасап, мұғалімге көрсетіңіз',again:'Қайта бастау',ch:'Көмекші кесте',
+sh:['к (кило) = 1000','М (мега) = 1 000 000','д (деци) = 0,1','с (санти) = 0,01','м (милли) = 0,001','мк (микро) = 0,000001','1 мл = 1 см³ = 0,000001 м³','1 т = 1000 кг, 1 кг = 1000 г']}};
+const sup='⁰¹²³⁴⁵⁶⁷⁸⁹',SP=k=>String(k).replace('-','⁻').replace(/\d/g,d=>sup[d]);
+const R=(a,b)=>a+Math.floor(Math.random()*(b-a+1)),pick=a=>a[R(0,a.length-1)],cl=x=>parseFloat(x.toPrecision(12)),
+fmt=x=>cl(x).toFixed(12).replace(/\.?0+$/,'').replace('.',','),sh=a=>a.map(x=>[Math.random(),x]).sort((p,q)=>p[0]-q[0]).map(x=>x[1]),
+U=u=>L=='kz'&&u=='ч'?'сағ':u,close=(x,y)=>Math.abs(x-y)<=Math.abs(y)*1e-9;
+function P(s){s=String(s).trim().replace(/[а-яёәіңғүұқөһ]+[²³]?\.?$/i,'').replace(/\s+/g,'').replace(/,/g,'.').replace(/[−–]/g,'-').replace(/⁻?[⁰¹²³⁴⁵⁶⁷⁸⁹]+/g,m=>'^'+m.replace('⁻','-').replace(/[⁰¹²³⁴⁵⁶⁷⁸⁹]/g,c=>sup.indexOf(c)));
+let m;if(m=s.match(/^(-?\d*\.?\d+)[·x×*]?10\^(-?\d+)$/))return +m[1]*Math.pow(10,+m[2]);if(/^-?\d*\.?\d+(e-?\d+)?$/i.test(s))return +s;return NaN}
+const PF=[['к',1000],['М',1e6],['д',.1],['с',.01],['м',.001],['мк',1e-6]],CV=[['км','м',1000],['см','м',.01],['мм','м',.001],['г','кг',.001],['кг','г',1000],['т','кг',1000],['мг','кг',1e-6],['мин','с',60],['ч','с',3600],['мл','м³',1e-6],['см³','м³',1e-6],['л','м³',.001]];
+function g0(){const e=pick([-5,-4,-3,-2,-1,2,3,4,5,6]),m=pick([1.2,2,3.5,4.5,5,6.4,7.2,8,9.1]);return{b:0,kind:Math.random()<.6?'to':'from',e,m,x:cl(m*Math.pow(10,e))}}
+function g1(){const[p,pf]=pick(PF),u=pick(['м','г','Н']),A=Math.random()<.5,n=pick([2,3,4.5,5,7,12,25,40]);return{b:1,p,pf,u,A,v:A?n:cl(n*pf),ans:A?cl(n*pf):n}}
+function g2(c){const[f,t,fac]=c;let v;do v=pick([2,5,8,12,25,45,350,3.5,1.5,.4]);while(cl(v*fac)<1e-6);return{b:2,f,t,fac,v,ans:cl(v*fac)}}
+const build=()=>[...Array(6)].map(g0).concat([...Array(6)].map(g1),sh(CV).slice(0,6).map(g2),['cd','cd','v','v','rec','rec'].map(g3),['vol','vol','one','one','si','si'].map(g4));
+function txt(q){const t=T[L];if(q.b>2)return txt2(q);if(q.b==0)return q.kind=='to'?t.q1a(fmt(q.x)):t.q1b(fmt(q.m)+' · 10'+SP(q.e));
+if(q.b==1)return `${t.cv} ${fmt(q.v)} ${q.A?q.p+q.u:q.u} = ? ${q.A?q.u:q.p+q.u}`;return `${t.cv} ${fmt(q.v)} ${U(q.f)} = ? ${U(q.t)}`}
+function atxt(q){if(q.b>2)return atxt2(q);return q.b==0?(q.kind=='to'?fmt(q.m)+' · 10'+SP(q.e):fmt(q.x)):fmt(q.ans)}
+function expl(q){const t=T[L];if(q.b>2)return expl2(q);if(q.b==0)return (q.kind=='to'?t.s1(q.e):t.s2(q.e))+`<br>${fmt(q.x)} = ${fmt(q.m)} · 10${SP(q.e)}`;
+if(q.b==1)return `1 ${q.p}${q.u} = ${fmt(q.pf)} ${q.u}; ${t.so}: ${fmt(q.v)} ${q.A?'·':':'} ${fmt(q.pf)} = ${fmt(q.ans)}`;
+return `1 ${U(q.f)} = ${fmt(q.fac)} ${U(q.t)}; ${t.so}: ${fmt(q.v)} · ${fmt(q.fac)} = ${fmt(q.ans)}`}
+const T2={ru:{c:'Определите цену деления мензурки (мл)',v:'Определите объём жидкости в мензурке (мл)',r:'Запишите результат измерения с учётом погрешности (ΔV = ±½ ЦД):',cd:'ЦД',a:(a,b)=>`В мензурку с водой ${a} мл погрузили тело, уровень поднялся до ${b} мл. Найдите объём тела (см³)`,o:(n,a,b)=>`В мензурке ${a} мл воды. После погружения ${n} одинаковых шариков уровень стал ${b} мл. Найдите объём одного шарика (см³)`,s:(a,b)=>`При погружении тела уровень воды в мензурке поднялся с ${a} мл до ${b} мл. Выразите объём тела в м³`},
+kz:{c:'Мензурканың бөлік құнын (БҚ) анықтаңыз (мл)',v:'Мензуркадағы сұйықтықтың көлемін анықтаңыз (мл)',r:'Өлшеу нәтижесін қателікті ескере отырып жазыңыз (ΔV = ±½ БҚ):',cd:'БҚ',a:(a,b)=>`Мензуркадағы ${a} мл суға дене батырылды, деңгей ${b} мл болды. Дененің көлемін табыңыз (см³)`,o:(n,a,b)=>`Мензуркада ${a} мл су бар. ${n} бірдей шар батырылғаннан кейін деңгей ${b} мл болды. Бір шардың көлемін табыңыз (см³)`,s:(a,b)=>`Дене батырылғанда мензуркадағы су деңгейі ${a} мл-ден ${b} мл-ге көтерілді. Дененің көлемін м³-пен өрнектеңіз`}};
+function g3(sub){const cd=pick([1,2,5]),max=pick([50,60,80,100]),V=cd*R(Math.ceil(15/cd),Math.floor((max-5)/cd));return{b:3,sub,cd,max,V,lo:10*R(0,max/10-1),ans:sub=='cd'?cd:V}}
+function g4(sub){const vb=sub=='one'?R(2,9):R(12,48),n=sub=='one'?R(2,5):1,V1=R(30,50);return{b:4,sub,vb,n,V1,V2:V1+n*vb,ans:sub=='si'?cl(vb*1e-6):vb}}
+function svg(q){const Y=v=>(240-v/q.max*220).toFixed(1);let s=`<svg viewBox='0 0 160 260' width='160' height='260' style='display:block;margin:0 auto' stroke='currentColor' fill='none'><rect x='41' y='${Y(q.V)}' width='58' height='${(240-Y(q.V)).toFixed(1)}' fill='#4aa3ff' fill-opacity='.55' stroke='none'/><rect x='40' y='20' width='60' height='220' stroke-width='2'/><text x='108' y='30' font-size='12' fill='currentColor' stroke='none'>мл</text>`;
+for(let v=0;v<=q.max;v+=q.cd){const lg=v%10==0;s+=`<line x1='40' x2='${lg?58:48}' y1='${Y(v)}' y2='${Y(v)}' stroke-width='1'/>`;if(lg)s+=`<text x='36' y='${(+Y(v)+4).toFixed(1)}' font-size='11' fill='currentColor' stroke='none' text-anchor='end'>${v}</text>`}
+return s+'</svg>'}
+function inp2(q,e){return q.sub=='rec'?`( ${e('i0',1)} ± ${e('i1',1)} ) мл`:`${e('i0')} ${q.b==3?'мл':q.sub=='si'?'м³':'см³'}`}
+function chk2(q,v){return q.sub=='rec'?close(P(v[0]),q.V)&&close(P(v[1]),q.cd/2):close(P(v[0]),q.ans)}
+function txt2(q){const t=T2[L];if(q.b==3)return q.sub=='cd'?t.c:q.sub=='v'?t.v:t.r;return q.sub=='vol'?t.a(q.V1,q.V2):q.sub=='one'?t.o(q.n,q.V1,q.V2):t.s(q.V1,q.V2)}
+function atxt2(q){return q.b==3&&q.sub=='rec'?`(${fmt(q.V)} ± ${fmt(q.cd/2)})`:fmt(q.ans)}
+function expl2(q){const t=T2[L];if(q.b==3){const c=`${t.cd} = (${q.lo+10} − ${q.lo}) / ${10/q.cd} = ${fmt(q.cd)}`;return q.sub=='cd'?c:q.sub=='v'?`${c}; V = ${q.V}`:`${c}; ΔV = ½ · ${t.cd} = ${fmt(q.cd/2)}; V = (${q.V} ± ${fmt(q.cd/2)})`}
+const d=`${q.V2} − ${q.V1} = ${q.n*q.vb}`;return q.sub=='vol'?`V = ${d} мл = ${q.vb} см³`:q.sub=='one'?`(${d}) / ${q.n} = ${q.vb} см³`:`V = ${d} мл = ${q.vb} см³; 1 см³ = 0,000001 м³; ${q.vb} · 0,000001 = ${fmt(q.ans)} м³`}
+const $=id=>document.getElementById(id),app=()=>$('app');
+function setLang(l){L=l;S&&S.qs?show():home()}
+const lb=()=>`<div style="text-align:right"><button class="g" onclick="setLang('ru')">РУС</button><button class="g" onclick="setLang('kz')">ҚАЗ</button></div>`;
+function home(){const t=T[L];S=null;app().innerHTML=`<div class="card">${lb()}<h2>📏 ${t.t}</h2><p><input type="text" id="nm" placeholder="${t.nm}" style="width:100%;max-width:100%"></p>
+<p><label><input type="checkbox" id="hn" checked> ${t.hn}</label></p><p class="s">${t.tip}</p><button onclick="start()">${t.go}</button>
+<details style="margin-top:12px"><summary>${t.ch}</summary><table>${t.sh.map(s=>`<tr><td>${s}</td></tr>`).join('')}</table></details></div>`}
+function start(){const t=T[L],n=$('nm').value.trim();if(!n){alert(t.nn);return}S={name:n,hints:$('hn').checked,qs:build(),i:0,sc:[0,0,0,0,0]};show()}
+function show(){const t=T[L],q=S.qs[S.i];if(!q)return fin();const n=S.qs.length,e=(id,w)=>`<input type="text" id="${id}" inputmode="decimal" autocomplete="off"${w?` style="width:4em"`:''}>`;
+let inp=q.b>2?inp2(q,e):q.b==0&&q.kind=='to'?`${e('i0',1)} · 10<sup>${e('i1',1)}</sup>`:`${e('i0')} ${q.b==0?'':q.b==1?(q.A?q.u:q.p+q.u):U(q.t)}`;
+app().innerHTML=`<div class="card">${lb()}<div class="s">${t.b[q.b]} · ${S.i+1}/${n}</div><div class="bar"><i style="width:${S.i/n*100}%"></i></div><div class="q">${txt(q)}</div>${q.b==3?svg(q):''}${inp}<div id="fb"></div><button id="bt" onclick="chk()">${t.chk}</button></div>`;$('i0').focus()}
+function chk(){const t=T[L],q=S.qs[S.i],v=[0,1].map(j=>$('i'+j)?$('i'+j).value:'');let ok;
+if(q.b>2)ok=chk2(q,v);else if(q.b==0&&q.kind=='to'){const a=P(v[0]);ok=close(a,q.m)&&a>=1&&a<10&&Number(v[1].replace(/[−–]/g,'-'))===q.e}else ok=close(P(v[0]),q.b==0?q.x:q.ans);
+S.d=S.d||{};if(ok&&!S.d[S.i])S.sc[q.b]++;S.d[S.i]=1;$('fb').innerHTML=`<p class="${ok?'ok':'no'}">${ok?t.ok:t.bad+atxt(q)}</p>${S.hints&&!ok?`<div class="ex">${expl(q)}</div>`:''}`;
+const b=$('bt');b.textContent=t.nx;b.onclick=()=>{S.i++;show()};[0,1].forEach(j=>$('i'+j)&&($('i'+j).disabled=true))}
+function fin(){const t=T[L],tot=S.sc.reduce((a,b)=>a+b,0),n=S.qs.length,pc=Math.round(tot/n*100);let bn=0;BONUS.forEach(([p,b])=>{if(pc>=p)bn=b});
+app().innerHTML=`<div class="card">${lb()}<h2>${t.res}</h2><p><b>${S.name}</b> · ${new Date().toLocaleDateString(L=='kz'?'kk-KZ':'ru-RU')}</p><table>${t.b.map((x,i)=>`<tr><td>${x}</td><td>${S.sc[i]}/6</td></tr>`).join('')}
+<tr><td><b>${t.tot}</b></td><td><b>${tot}/${n} (${pc}%)</b></td></tr><tr><td>${t.bon}</td><td>+${bn}</td></tr></table><p class="s">📸 ${t.shot}</p><button onclick="home()">${t.again}</button></div>`}
+document.addEventListener('keydown',e=>{if(e.key=='Enter'){const b=$('bt');if(b)b.click()}});home();
+</script></body></html>
 
