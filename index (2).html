@@ -63,7 +63,7 @@ function home(){const t=T[L];S=null;app().innerHTML=`<div class="card">${lb()}<h
 function start(){const t=T[L],n=$('nm').value.trim();if(!n){alert(t.nn);return}S={name:n,hints:$('hn').checked,qs:build(),i:0,sc:[0,0,0,0,0]};show()}
 function show(){const t=T[L],q=S.qs[S.i];if(!q)return fin();const n=S.qs.length,e=(id,w)=>`<input type="text" id="${id}" inputmode="decimal" autocomplete="off"${w?` style="width:4em"`:''}>`;
 let inp=q.b>2?inp2(q,e):q.b==0&&q.kind=='to'?`${e('i0',1)} · 10<sup>${e('i1',1)}</sup>`:`${e('i0')} ${q.b==0?'':q.b==1?(q.A?q.u:q.p+q.u):U(q.t)}`;
-app().innerHTML=`<div class="card">${lb()}<div class="s">${t.b[q.b]} · ${S.i+1}/${n}</div><div class="bar"><i style="width:${S.i/n*100}%"></i></div><div class="q">${txt(q)}</div>${q.b==3?svg(q):''}${inp}<div id="fb"></div><button id="bt" onclick="chk()">${t.chk}</button></div>`;$('i0').focus()}
+app().innerHTML=`<div class="card">${lb()}<div class="s">${t.b[q.b]} · ${S.i+1}/${n}</div><div class="bar"><i style="width:${S.i/n*100}%"></i></div><div class="q">${txt(q)}</div>${q.b==3?svg(q):''}${inp}<div><button class="g" onclick="ins('-')">− минус</button></div><div id="fb"></div><button id="bt" onclick="chk()">${t.chk}</button></div>`;$('i0').focus()}
 function chk(){const t=T[L],q=S.qs[S.i],v=[0,1].map(j=>$('i'+j)?$('i'+j).value:'');let ok;
 if(q.b>2)ok=chk2(q,v);else if(q.b==0&&q.kind=='to'){const a=P(v[0]);ok=close(a,q.m)&&a>=1&&a<10&&Number(v[1].replace(/[−–]/g,'-'))===q.e}else ok=close(P(v[0]),q.b==0?q.x:q.ans);
 S.d=S.d||{};if(ok&&!S.d[S.i])S.sc[q.b]++;S.d[S.i]=1;$('fb').innerHTML=`<p class="${ok?'ok':'no'}">${ok?t.ok:t.bad+atxt(q)}</p>${S.hints&&!ok?`<div class="ex">${expl(q)}</div>`:''}`;
@@ -71,5 +71,7 @@ const b=$('bt');b.textContent=t.nx;b.onclick=()=>{S.i++;show()};[0,1].forEach(j=
 function fin(){const t=T[L],tot=S.sc.reduce((a,b)=>a+b,0),n=S.qs.length,pc=Math.round(tot/n*100);let bn=0;BONUS.forEach(([p,b])=>{if(pc>=p)bn=b});
 app().innerHTML=`<div class="card">${lb()}<h2>${t.res}</h2><p><b>${S.name}</b> · ${new Date().toLocaleDateString(L=='kz'?'kk-KZ':'ru-RU')}</p><table>${t.b.map((x,i)=>`<tr><td>${x}</td><td>${S.sc[i]}/6</td></tr>`).join('')}
 <tr><td><b>${t.tot}</b></td><td><b>${tot}/${n} (${pc}%)</b></td></tr><tr><td>${t.bon}</td><td>+${bn}</td></tr></table><p class="s">📸 ${t.shot}</p><button onclick="home()">${t.again}</button></div>`}
+let LF=null;document.addEventListener('focusin',e=>{if(e.target.tagName=='INPUT'&&e.target.type=='text')LF=e.target});
+function ins(s){const i=LF&&document.body.contains(LF)?LF:$('i0');if(!i||i.disabled)return;const a=i.selectionStart==null?i.value.length:i.selectionStart,b=i.selectionEnd==null?a:i.selectionEnd;i.value=i.value.slice(0,a)+s+i.value.slice(b);i.focus();if(i.setSelectionRange)i.setSelectionRange(a+s.length,a+s.length)}
 document.addEventListener('keydown',e=>{if(e.key=='Enter'){const b=$('bt');if(b)b.click()}});home();
 </script></body></html>
