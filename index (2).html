@@ -58,7 +58,7 @@ const $=id=>document.getElementById(id),app=()=>$('app');
 function setLang(l){L=l;S&&S.qs?show():home()}
 const lb=()=>`<div style="text-align:right"><button class="g" onclick="setLang('ru')">РУС</button><button class="g" onclick="setLang('kz')">ҚАЗ</button></div>`;
 function home(){const t=T[L];S=null;app().innerHTML=`<div class="card">${lb()}<h2>📏 ${t.t}</h2><p><input type="text" id="nm" placeholder="${t.nm}" style="width:100%;max-width:100%"></p>
-<p><label><input type="checkbox" id="hn" checked> ${t.hn}</label></p><p class="s">${t.tip}</p><button onclick="start()">${t.go}</button>
+<p><label><input type="checkbox" id="hn" checked> ${t.hn}</label></p><p class="s">${t.tip} · v2</p><button onclick="start()">${t.go}</button>
 <details style="margin-top:12px"><summary>${t.ch}</summary><table>${t.sh.map(s=>`<tr><td>${s}</td></tr>`).join('')}</table></details></div>`}
 function start(){const t=T[L],n=$('nm').value.trim();if(!n){alert(t.nn);return}S={name:n,hints:$('hn').checked,qs:build(),i:0,sc:[0,0,0,0,0]};show()}
 function show(){const t=T[L],q=S.qs[S.i];if(!q)return fin();const n=S.qs.length,e=(id,w)=>`<input type="text" id="${id}" inputmode="decimal" autocomplete="off"${w?` style="width:4em"`:''}>`;
