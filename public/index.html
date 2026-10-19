@@ -55,13 +55,13 @@ function atxt2(q){return q.b==3&&q.sub=='rec'?`(${fmt(q.V)} ± ${fmt(q.cd/2)})`:
 function expl2(q){const t=T2[L];if(q.b==3){const c=`${t.cd} = (${q.lo+10} − ${q.lo}) / ${10/q.cd} = ${fmt(q.cd)}`;return q.sub=='cd'?c:q.sub=='v'?`${c}; V = ${q.V}`:`${c}; ΔV = ½ · ${t.cd} = ${fmt(q.cd/2)}; V = (${q.V} ± ${fmt(q.cd/2)})`}
 const d=`${q.V2} − ${q.V1} = ${q.n*q.vb}`;return q.sub=='vol'?`V = ${d} мл = ${q.vb} см³`:q.sub=='one'?`(${d}) / ${q.n} = ${q.vb} см³`:`V = ${d} мл = ${q.vb} см³; 1 см³ = 0,000001 м³; ${q.vb} · 0,000001 = ${fmt(q.ans)} м³`}
 const $=id=>document.getElementById(id),app=()=>$('app');
-function setLang(l){L=l;S&&S.qs?show():home()}
+function setLang(l){L=l;if(!S){home();return}switch(S.view){case 'diagnostic':diagnostic();break;case 'lesson':showLesson();break;case 'learningTask':showLearningTask(true);break;case 'learningResults':learningResults();break;case 'results':fin();break;default:show()}}
 const lb=()=>`<div style="text-align:right"><button class="g" onclick="setLang('ru')">РУС</button><button class="g" onclick="setLang('kz')">ҚАЗ</button></div>`;
 function home(){const t=T[L];S=null;app().innerHTML=`<div class="card">${lb()}<h2>📏 ${t.t}</h2><p><input type="text" id="nm" placeholder="${t.nm}" style="width:100%;max-width:100%"></p>
 <p><label><input type="checkbox" id="hn" checked> ${t.hn}</label></p><p class="s">${t.tip} · v3</p><button onclick="start(1)">${T3[L].sec1}</button><button onclick="start(2)">${T3[L].sec2}</button>
 <details style="margin-top:12px"><summary>${t.ch}</summary><table>${t.sh.map(s=>`<tr><td>${s}</td></tr>`).join('')}</table></details></div>`}
-function start(sec){const t=T[L],n=$('nm').value.trim();if(!n){alert(t.nn);return}S={name:n,hints:$('hn').checked,sec:sec,qs:sec==2?build2():build(),i:0,sc:[0,0,0,0,0]};show()}
-function show(){const t=T[L],q=S.qs[S.i];if(!q)return fin();const n=S.qs.length,e=(id,w)=>`<input type="text" id="${id}" inputmode="decimal" autocomplete="off"${w?` style="width:4em"`:''}>`;
+function start(sec){const t=T[L],n=$('nm').value.trim();if(!n){alert(t.nn);return}S={name:n,hints:$('hn').checked,sec:sec,qs:sec==2?build2():build(),i:0,sc:sec==2?[0,0,0,0]:[0,0,0,0,0],view:'question'};show()}
+function show(){S.view='question';const t=T[L],q=S.qs[S.i];if(!q)return fin();const n=S.qs.length,e=(id,w)=>`<input type="text" id="${id}" inputmode="decimal" autocomplete="off"${w?` style="width:4em"`:''}>`;
 let inp=q.b>9?inp3(q,e):q.b>2?inp2(q,e):q.b==0&&q.kind=='to'?`${e('i0',1)} · 10<sup>${e('i1',1)}</sup>`:`${e('i0')} ${q.b==0?'':q.b==1?(q.A?q.u:q.p+q.u):U(q.t)}`;
 app().innerHTML=`<div class="card">${lb()}<div class="s">${nms()[bi(q)]} · ${S.i+1}/${n}</div><div class="bar"><i style="width:${S.i/n*100}%"></i></div><div class="q">${txt(q)}</div>${q.b==3?svg(q):''}${inp}<div><button class="g" onclick="ins('-')">− минус</button></div><div id="fb"></div><button id="bt" onclick="chk()">${t.chk}</button></div>`;$('i0').focus()}
 function chk(){const t=T[L],q=S.qs[S.i],v=[0,1].map(j=>$('i'+j)?$('i'+j).value:'');let ok;
@@ -69,9 +69,9 @@ if(q.b>9)ok=chk3(q,v);else if(q.b>2)ok=chk2(q,v);else if(q.b==0&&q.kind=='to'){c
 S.d=S.d||{};if(ok&&!S.d[S.i])S.sc[bi(q)]++;S.d[S.i]=1;$('fb').innerHTML=`<p class="${ok?'ok':'no'}">${ok?t.ok:t.bad+atxt(q)}</p>${S.hints&&!ok?`<div class="ex">${expl(q)}</div>`:''}`;
 const b=$('bt');b.textContent=t.nx;b.onclick=()=>{S.i++;show()};[0,1].forEach(j=>$('i'+j)&&($('i'+j).disabled=true))}
 function fin(){
- if(S.sec==2 && !S.learningFinished){diagnostic();return}
+ if(S.sec==2 && !S.diagnosticDone){diagnostic();return}
  if(S.sec==2 && S.learningFinished){learningResults();return}
- const t=T[L],tot=S.sc.reduce((a,b)=>a+b,0),n=S.qs.length,pc=Math.round(tot/n*100);let bn=0;BONUS.forEach(([p,b])=>{if(pc>=p)bn=b});
+ S.view='results';const t=T[L],tot=S.sc.reduce((a,b)=>a+b,0),n=S.qs.length,pc=Math.round(tot/n*100);let bn=0;BONUS.forEach(([p,b])=>{if(pc>=p)bn=b});
  app().innerHTML=`<div class="card">${lb()}<h2>${t.res}</h2><p><b>${S.name}</b> · ${new Date().toLocaleDateString(L=='kz'?'kk-KZ':'ru-RU')}</p><table>${nms().map((x,i)=>`<tr><td>${x}</td><td>${S.sc[i]}/6</td></tr>`).join('')}
  <tr><td><b>${t.tot}</b></td><td><b>${tot}/${n} (${pc}%)</b></td></tr><tr><td>${t.bon}</td><td>+${bn}</td></tr></table><p class="s">📸 ${t.shot}</p><button onclick="home()">${t.again}</button></div>`
 }
@@ -89,7 +89,7 @@ kz:{title:'Жеке жаттығу',diagnosis:'Диагностика нәтиж
 ['Орташа жылдамдық','Орташа жылдамдық бүкіл жолды барлық уақытқа бөлу арқылы табылады. Әртүрлі бөліктердегі жылдамдықтарды жай ғана орташа арифметикалықпен есептеуге болмайды.','Дене 2 сағатта 100 км, келесі 1 сағатта 60 км жүрді. Барлық жол 160 км, уақыт 3 сағат. vорт = 160 / 3 ≈ 53,3 км/сағ.','vорт = барлық жол / барлық уақыт']
 ]}}
 function diagnostic(){
- const d=LEARN[L],weak=S.sc.map((score,i)=>({score:score,i:i})).filter(x=>x.score<5);
+ S.view='diagnostic';S.diagnosticDone=true;const d=LEARN[L],weak=S.sc.map((score,i)=>({score:score,i:i})).filter(x=>x.score<5);
  S.learnTopics=weak.map(x=>x.i);S.learnScores=[0,0,0,0];S.learnTopicIdx=0;S.learnTaskIdx=0;S.learningFinished=false;
  app().innerHTML='<div class="card">'+lb()+'<h2>'+d.diagnosis+'</h2><p><b>'+S.name+'</b></p><table>'+d.topics.map((x,i)=>'<tr><td>'+x[0]+'</td><td><b>'+S.sc[i]+'/6</b></td></tr>').join('')+'</table>'+
  (weak.length?'<h3>'+d.weak+'</h3><ul>'+weak.map(x=>'<li>'+d.topics[x.i][0]+' — '+x.score+'/6</li>').join('')+'</ul><p>Әр тақырыпқа қысқаша түсіндірме, мысал және екі тапсырма беріледі. / Для каждой темы будут объяснение, пример и два задания.</p><button onclick="beginLearning()">'+d.start+'</button>':'<p class="ok">'+d.good+'</p><button onclick="S.learningFinished=true;learningResults()">'+d.skip+'</button>')+
@@ -97,7 +97,7 @@ function diagnostic(){
 }
 function beginLearning(){S.learnTopicIdx=0;S.learnTaskIdx=0;S.learnScores=[0,0,0,0];if(!S.learnTopics.length){S.learningFinished=true;learningResults();return}showLesson()}
 function showLesson(){
- const d=LEARN[L],idx=S.learnTopics[S.learnTopicIdx],x=d.topics[idx];
+ S.view='lesson';const d=LEARN[L],idx=S.learnTopics[S.learnTopicIdx],x=d.topics[idx];
  app().innerHTML='<div class="card">'+lb()+'<p class="s">'+(S.learnTopicIdx+1)+'/'+S.learnTopics.length+'</p><h2>'+d.lesson+': '+x[0]+'</h2><h3>'+d.theory+'</h3><p>'+x[1]+'</p><h3>'+d.example+'</h3><div class="ex">'+x[2]+'<p><b>'+x[3]+'</b></p></div><button onclick="startLearningTasks()">'+d.practice+'</button></div>';
 }
 function makeLearningQuestion(topic){
@@ -107,8 +107,8 @@ function makeLearningQuestion(topic){
  return g13(pick(['a3','a4']));
 }
 function startLearningTasks(){S.learnTaskIdx=0;showLearningTask()}
-function showLearningTask(){
- const d=LEARN[L],topic=S.learnTopics[S.learnTopicIdx];S.learnQ=makeLearningQuestion(topic);S.learnAnswered=false;
+function showLearningTask(keepQ=false){
+ S.view='learningTask';const d=LEARN[L],topic=S.learnTopics[S.learnTopicIdx];if(!keepQ){S.learnQ=makeLearningQuestion(topic);S.learnAnswered=false;}
  const q=S.learnQ,e=(id,w)=>'<input type="text" id="'+id+'" inputmode="decimal" autocomplete="off"'+(w?' style="width:4em"':'')+'>';
  app().innerHTML='<div class="card">'+lb()+'<p class="s">'+d.topics[topic][0]+' · '+d.task+' '+(S.learnTaskIdx+1)+'/2</p><div class="q">'+txt3(q)+'</div>'+inp3(q,e)+'<div id="learnfb"></div><button id="learnbtn" onclick="checkLearningAnswer()">'+d.next+'</button></div>';
  const first=$('i0');if(first&&first.type!=='hidden')first.focus();
@@ -123,7 +123,7 @@ function checkLearningAnswer(){
 }
 function nextLearningTask(){if(S.learnTaskIdx===0){S.learnTaskIdx=1;showLearningTask();return}S.learnTopicIdx++;if(S.learnTopicIdx<S.learnTopics.length)showLesson();else{S.learningFinished=true;learningResults()}}
 function learningResults(){
- const d=LEARN[L],total=S.learnTopics.reduce((a,i)=>a+S.learnScores[i],0),possible=S.learnTopics.length*2;
+ S.view='learningResults';const d=LEARN[L],total=S.learnTopics.reduce((a,i)=>a+S.learnScores[i],0),possible=S.learnTopics.length*2;
  app().innerHTML='<div class="card">'+lb()+'<h2>'+d.final+'</h2><p><b>'+S.name+'</b></p><table><tr><th>Тақырып / Тема</th><th>'+d.initial+'</th><th>'+d.practiceScore+'</th></tr>'+d.topics.map((x,i)=>'<tr><td>'+x[0]+'</td><td>'+S.sc[i]+'/6</td><td>'+(S.learnTopics.includes(i)?S.learnScores[i]+'/2':'—')+'</td></tr>').join('')+'</table><p><b>'+d.done+': '+total+'/'+possible+'</b></p><p>'+d.allDone+'</p><p class="s">Нәтижелер сақталмайды / Результаты не сохраняются после обновления.</p><button onclick="home()">'+d.retry+'</button></div>';
 }
 const T3={ru:{sec1:'Величины и измерения',sec2:'Механическое движение',m:['Вид движения','Скорость, путь, время','Перемещение и координата','Средняя скорость'],eq:'Равномерное',ne:'Неравномерное',fa:'(v₁ + v₂) / 2',fb:'(l₁ + l₂) / (t₁ + t₂)',same:'Одинаковые пути за любые равные промежутки времени → равномерное движение',diff:'Разные пути за равные промежутки времени → неравномерное движение',cl0:'Начало и конец траектории совпадают → перемещение равно нулю',fx:'Средняя скорость = весь путь / всё время = (l₁ + l₂) / (t₁ + t₂). Это не среднее арифметическое скоростей',fm:'Какая формула верна для средней скорости?',
