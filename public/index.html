@@ -55,7 +55,7 @@ function atxt2(q){return q.b==3&&q.sub=='rec'?`(${fmt(q.V)} ± ${fmt(q.cd/2)})`:
 function expl2(q){const t=T2[L];if(q.b==3){const c=`${t.cd} = (${q.lo+10} − ${q.lo}) / ${10/q.cd} = ${fmt(q.cd)}`;return q.sub=='cd'?c:q.sub=='v'?`${c}; V = ${q.V}`:`${c}; ΔV = ½ · ${t.cd} = ${fmt(q.cd/2)}; V = (${q.V} ± ${fmt(q.cd/2)})`}
 const d=`${q.V2} − ${q.V1} = ${q.n*q.vb}`;return q.sub=='vol'?`V = ${d} мл = ${q.vb} см³`:q.sub=='one'?`(${d}) / ${q.n} = ${q.vb} см³`:`V = ${d} мл = ${q.vb} см³; 1 см³ = 0,000001 м³; ${q.vb} · 0,000001 = ${fmt(q.ans)} м³`}
 const $=id=>document.getElementById(id),app=()=>$('app');
-function setLang(l){L=l;if(!S){home();return}switch(S.view){case 'diagnostic':diagnostic();break;case 'lesson':showLesson();break;case 'learningTask':showLearningTask(true);break;case 'learningResults':learningResults();break;case 'results':fin();break;default:show()}}
+function setLang(l){const view=S&&S.view,values=(view==='question'||view==='learningTask')?[0,1].map(j=>$('i'+j)?$('i'+j).value:''):null,answered=view==='question'?!!(S.d&&S.d[S.i]):view==='learningTask'&&!!S.learnAnswered;L=l;if(!S){home();return}switch(view){case 'diagnostic':diagnostic();break;case 'lesson':showLesson();break;case 'learningTask':showLearningTask(true);if(values)[0,1].forEach(j=>{if($('i'+j)&&$('i'+j).type!=='hidden')$('i'+j).value=values[j]});break;case 'learningResults':learningResults();break;case 'results':fin();break;default:show();if(values)[0,1].forEach(j=>{if($('i'+j)&&$('i'+j).type!=='hidden')$('i'+j).value=values[j]});if(answered)restoreAnsweredQuestion()}}
 const lb=()=>`<div style="text-align:right"><button class="g" onclick="setLang('ru')">РУС</button><button class="g" onclick="setLang('kz')">ҚАЗ</button></div>`;
 function home(){const t=T[L];S=null;app().innerHTML=`<div class="card">${lb()}<h2>📏 ${t.t}</h2><p><input type="text" id="nm" placeholder="${t.nm}" style="width:100%;max-width:100%"></p>
 <p><label><input type="checkbox" id="hn" checked> ${t.hn}</label></p><p class="s">${t.tip} · v3</p><button onclick="start(1)">${T3[L].sec1}</button><button onclick="start(2)">${T3[L].sec2}</button>
@@ -66,7 +66,7 @@ let inp=q.b>9?inp3(q,e):q.b>2?inp2(q,e):q.b==0&&q.kind=='to'?`${e('i0',1)} · 10
 app().innerHTML=`<div class="card">${lb()}<div class="s">${nms()[bi(q)]} · ${S.i+1}/${n}</div><div class="bar"><i style="width:${S.i/n*100}%"></i></div><div class="q">${txt(q)}</div>${q.b==3?svg(q):''}${inp}<div><button class="g" onclick="insMinus()">− минус</button></div><div id="fb"></div><button id="bt" onclick="chk()">${t.chk}</button></div>`;$('i0').focus()}
 function chk(){const t=T[L],q=S.qs[S.i],v=[0,1].map(j=>$('i'+j)?$('i'+j).value:'');let ok;
 if(q.b>9)ok=chk3(q,v);else if(q.b>2)ok=chk2(q,v);else if(q.b==0&&q.kind=='to'){const a=P(v[0]);ok=close(a,q.m)&&a>=1&&a<10&&Number(v[1].replace(/[−–]/g,'-'))===q.e}else ok=close(P(v[0]),q.b==0?q.x:q.ans);
-S.d=S.d||{};if(ok&&!S.d[S.i])S.sc[bi(q)]++;S.d[S.i]=1;$('fb').innerHTML=`<p class="${ok?'ok':'no'}">${ok?t.ok:t.bad+atxt(q)}</p>${S.hints&&!ok?`<div class="ex">${expl(q)}</div>`:''}`;
+S.d=S.d||{};if(ok&&!S.d[S.i])S.sc[bi(q)]++;S.d[S.i]=1;S.lastOk=ok;S.lastV=v;$('fb').innerHTML=`<p class="${ok?'ok':'no'}">${ok?t.ok:t.bad+atxt(q)}</p>${S.hints&&!ok?`<div class="ex">${expl(q)}</div>`:''}`;
 const b=$('bt');b.textContent=t.nx;b.onclick=()=>{S.i++;show()};[0,1].forEach(j=>$('i'+j)&&($('i'+j).disabled=true))}
 function fin(){
  if(S.sec==2 && !S.diagnosticDone){diagnostic();return}
@@ -111,12 +111,12 @@ function showLearningTask(keepQ=false){
  S.view='learningTask';const d=LEARN[L],topic=S.learnTopics[S.learnTopicIdx];if(!keepQ){S.learnQ=makeLearningQuestion(topic);S.learnAnswered=false;}
  const q=S.learnQ,e=(id,w)=>'<input type="text" id="'+id+'" inputmode="decimal" autocomplete="off"'+(w?' style="width:4em"':'')+'>';
  app().innerHTML='<div class="card">'+lb()+'<p class="s">'+d.topics[topic][0]+' · '+d.task+' '+(S.learnTaskIdx+1)+'/2</p><div class="q">'+txt3(q)+'</div>'+inp3(q,e)+'<div id="learnfb"></div><button id="learnbtn" onclick="checkLearningAnswer()">'+d.next+'</button></div>';
- const first=$('i0');if(first&&first.type!=='hidden')first.focus();
+ if(keepQ&&S.learnAnswered){$('learnfb').innerHTML='<p class="'+(S.learnLastOk?'ok':'no')+'">'+(S.learnLastOk?d.correct:d.wrong)+'</p>'+(!S.learnLastOk?'<div class="ex">'+expl3(q)+'</div>':'');const b=$('learnbtn');b.textContent=S.learnTaskIdx===0?d.continue:d.finishTopic;b.onclick=nextLearningTask;[0,1].forEach(j=>{if($('i'+j))$('i'+j).disabled=true})}const first=$('i0');if(first&&first.type!=='hidden'&&!S.learnAnswered)first.focus();
 }
 function checkLearningAnswer(){
  if(S.learnAnswered)return;
  const d=LEARN[L],q=S.learnQ,v=[0,1].map(j=>$('i'+j)?$('i'+j).value:'');
- const ok=chk3(q,v);S.learnAnswered=true;if(ok)S.learnScores[S.learnTopics[S.learnTopicIdx]]++;
+ const ok=chk3(q,v);S.learnAnswered=true;S.learnLastOk=ok;S.learnLastV=v;if(ok)S.learnScores[S.learnTopics[S.learnTopicIdx]]++;
  $('learnfb').innerHTML='<p class="'+(ok?'ok':'no')+'">'+(ok?d.correct:d.wrong)+'</p>'+(!ok?'<div class="ex">'+expl3(q)+'</div>':'');
  const b=$('learnbtn');b.textContent=S.learnTaskIdx===0?d.continue:d.finishTopic;b.onclick=nextLearningTask;
  [0,1].forEach(j=>{if($('i'+j))$('i'+j).disabled=true});
@@ -165,5 +165,6 @@ function chk3(q,v){return q.ch?v[0]==q.ans:q.tol?Math.abs(P(v[0])-q.ans)<=q.tol:
 let LF=null;document.addEventListener('focusin',e=>{if(e.target.tagName=='INPUT'&&e.target.type=='text')LF=e.target});
 function ins(s){const i=LF&&document.body.contains(LF)?LF:$('i0');if(!i||i.disabled)return;const a=i.selectionStart==null?i.value.length:i.selectionStart,b=i.selectionEnd==null?a:i.selectionEnd;i.value=i.value.slice(0,a)+s+i.value.slice(b);i.focus();if(i.setSelectionRange)i.setSelectionRange(a+s.length,a+s.length)}
 function insMinus(){const i=LF&&document.body.contains(LF)&&LF.type==='text'&&!LF.disabled?LF:$('i0');if(!i||i.disabled||i.type==='hidden')return;const v=i.value.replace(/^[−–]/,'-');i.value=v.startsWith('-')?v.slice(1):'-'+v;i.focus();if(i.setSelectionRange)i.setSelectionRange(1,1)}
+function restoreAnsweredQuestion(){const t=T[L],q=S.qs[S.i],ok=!!S.lastOk,v=S.lastV||[];$('fb').innerHTML='<p class="'+(ok?'ok':'no')+'">'+(ok?t.ok:t.bad+atxt(q))+'</p>'+(S.hints&&!ok?'<div class="ex">'+expl(q)+'</div>':'');const b=$('bt');b.textContent=t.nx;b.onclick=()=>{S.i++;show()};[0,1].forEach(j=>{if($('i'+j)){if(j<v.length)$('i'+j).value=v[j];$('i'+j).disabled=true}})}
 document.addEventListener('keydown',e=>{if(e.key=='Enter'){const b=$('bt');if(b)b.click()}});home();
 </script></body></html>
