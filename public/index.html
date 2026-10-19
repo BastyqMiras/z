@@ -110,7 +110,7 @@ function startLearningTasks(){S.learnTaskIdx=0;showLearningTask()}
 function showLearningTask(keepQ=false){
  S.view='learningTask';const d=LEARN[L],topic=S.learnTopics[S.learnTopicIdx];if(!keepQ){S.learnQ=makeLearningQuestion(topic);S.learnAnswered=false;}
  const q=S.learnQ,e=(id,w)=>'<input type="text" id="'+id+'" inputmode="decimal" autocomplete="off"'+(w?' style="width:4em"':'')+'>';
- app().innerHTML='<div class="card">'+lb()+'<p class="s">'+d.topics[topic][0]+' · '+d.task+' '+(S.learnTaskIdx+1)+'/2</p><div class="q">'+txt3(q)+'</div>'+inp3(q,e)+'<div id="learnfb"></div><button id="learnbtn" onclick="checkLearningAnswer()">'+d.next+'</button></div>';
+ app().innerHTML='<div class="card">'+lb()+'<p class="s">'+d.topics[topic][0]+' · '+d.task+' '+(S.learnTaskIdx+1)+'/2</p><div class="q">'+txt3(q)+'</div>'+inp3(q,e)+'<div><button class="g" onclick="insMinus()">± знак</button></div><div id="learnfb"></div><button id="learnbtn" onclick="checkLearningAnswer()">'+d.next+'</button></div>';
  if(keepQ&&S.learnAnswered){$('learnfb').innerHTML='<p class="'+(S.learnLastOk?'ok':'no')+'">'+(S.learnLastOk?d.correct:d.wrong)+'</p>'+(!S.learnLastOk?'<div class="ex">'+expl3(q)+'</div>':'');const b=$('learnbtn');b.textContent=S.learnTaskIdx===0?d.continue:d.finishTopic;b.onclick=nextLearningTask;[0,1].forEach(j=>{if($('i'+j))$('i'+j).disabled=true})}const first=$('i0');if(first&&first.type!=='hidden'&&!S.learnAnswered)first.focus();
 }
 function checkLearningAnswer(){
