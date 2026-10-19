@@ -68,9 +68,64 @@ function chk(){const t=T[L],q=S.qs[S.i],v=[0,1].map(j=>$('i'+j)?$('i'+j).value:'
 if(q.b>9)ok=chk3(q,v);else if(q.b>2)ok=chk2(q,v);else if(q.b==0&&q.kind=='to'){const a=P(v[0]);ok=close(a,q.m)&&a>=1&&a<10&&Number(v[1].replace(/[−–]/g,'-'))===q.e}else ok=close(P(v[0]),q.b==0?q.x:q.ans);
 S.d=S.d||{};if(ok&&!S.d[S.i])S.sc[bi(q)]++;S.d[S.i]=1;$('fb').innerHTML=`<p class="${ok?'ok':'no'}">${ok?t.ok:t.bad+atxt(q)}</p>${S.hints&&!ok?`<div class="ex">${expl(q)}</div>`:''}`;
 const b=$('bt');b.textContent=t.nx;b.onclick=()=>{S.i++;show()};[0,1].forEach(j=>$('i'+j)&&($('i'+j).disabled=true))}
-function fin(){const t=T[L],tot=S.sc.reduce((a,b)=>a+b,0),n=S.qs.length,pc=Math.round(tot/n*100);let bn=0;BONUS.forEach(([p,b])=>{if(pc>=p)bn=b});
-app().innerHTML=`<div class="card">${lb()}<h2>${t.res}</h2><p><b>${S.name}</b> · ${new Date().toLocaleDateString(L=='kz'?'kk-KZ':'ru-RU')}</p><table>${nms().map((x,i)=>`<tr><td>${x}</td><td>${S.sc[i]}/6</td></tr>`).join('')}
-<tr><td><b>${t.tot}</b></td><td><b>${tot}/${n} (${pc}%)</b></td></tr><tr><td>${t.bon}</td><td>+${bn}</td></tr></table><p class="s">📸 ${t.shot}</p><button onclick="home()">${t.again}</button></div>`}
+function fin(){
+ if(S.sec==2 && !S.learningFinished){diagnostic();return}
+ if(S.sec==2 && S.learningFinished){learningResults();return}
+ const t=T[L],tot=S.sc.reduce((a,b)=>a+b,0),n=S.qs.length,pc=Math.round(tot/n*100);let bn=0;BONUS.forEach(([p,b])=>{if(pc>=p)bn=b});
+ app().innerHTML=`<div class="card">${lb()}<h2>${t.res}</h2><p><b>${S.name}</b> · ${new Date().toLocaleDateString(L=='kz'?'kk-KZ':'ru-RU')}</p><table>${nms().map((x,i)=>`<tr><td>${x}</td><td>${S.sc[i]}/6</td></tr>`).join('')}
+ <tr><td><b>${t.tot}</b></td><td><b>${tot}/${n} (${pc}%)</b></td></tr><tr><td>${t.bon}</td><td>+${bn}</td></tr></table><p class="s">📸 ${t.shot}</p><button onclick="home()">${t.again}</button></div>`
+}
+const LEARN={
+ru:{title:'Персональная тренировка',diagnosis:'Результаты диагностики',weak:'Темы для повторения',good:'Отлично! Все темы усвоены достаточно хорошо.',start:'Начать работу над ошибками',skip:'Завершить',lesson:'Разберём тему',theory:'Коротко о главном',example:'Разобранный пример',practice:'Перейти к заданиям',task:'Задание',next:'Проверить ответ',continue:'Следующее задание',finishTopic:'Перейти к следующей теме',final:'Результат после тренировки',initial:'Диагностика',practiceScore:'Правильно в тренировке',done:'Тренировка завершена',correct:'Верно! Хорошо усвоено.',wrong:'Пока неверно. Посмотри разбор и примени правило в следующем задании.',allDone:'Ты прошёл все рекомендованные задания.',retry:'Начать заново',topics:[
+['Виды движения','При равномерном движении тело проходит одинаковые пути за равные промежутки времени. Если пути за равные промежутки различаются — движение неравномерное. Траектория — линия движения тела.','Например: 3 м, 3 м, 3 м за каждую секунду — равномерное движение. 2 м, 4 м, 6 м — неравномерное.','Сравнивай пути за одинаковые промежутки времени.'],
+['Скорость, путь и время','Скорость показывает, какой путь тело проходит за единицу времени. Формулы: v = s / t, s = v · t, t = s / v. Проверь единицы измерения перед расчётом.','Автобус проехал 120 км за 2 ч. v = 120 / 2 = 60 км/ч. Для перевода км/ч в м/с раздели на 3,6; для обратного перевода умножь на 3,6.','v = s / t; s = v · t; t = s / v'],
+['Перемещение и координата','Перемещение по оси: sₓ = x − x₀. Знак показывает направление. Координата при равномерном движении: x = x₀ + vₓ · t. Путь — длина траектории, а перемещение учитывает начальное и конечное положение.','Тело перешло из x₀ = 2 м в x = 8 м. sₓ = 8 − 2 = 6 м. Если конечная координата −3 м, sₓ = −3 − 2 = −5 м.','sₓ = x − x₀; x = x₀ + vₓ · t'],
+['Средняя скорость','Средняя скорость за весь путь равна общему пути, делённому на общее время. Не усредняй скорости простым сложением, если участки отличаются по длине или времени.','За 2 ч тело прошло 100 км, затем за 1 ч — 60 км. Общий путь 160 км, время 3 ч. vср = 160 / 3 ≈ 53,3 км/ч.','vср = весь путь / всё время']
+]},
+kz:{title:'Жеке жаттығу',diagnosis:'Диагностика нәтижелері',weak:'Қайталау қажет тақырыптар',good:'Жарайсың! Барлық тақырыптар жеткілікті меңгерілген.',start:'Қателермен жұмысты бастау',skip:'Аяқтау',lesson:'Тақырыпты қайталайық',theory:'Негізгі түсінік',example:'Шешу үлгісі',practice:'Тапсырмаларға өту',task:'Тапсырма',next:'Жауапты тексеру',continue:'Келесі тапсырма',finishTopic:'Келесі тақырыпқа өту',final:'Жаттығудан кейінгі нәтиже',initial:'Диагностика',practiceScore:'Жаттығуда дұрыс',done:'Жаттығу аяқталды',correct:'Дұрыс! Жақсы меңгердің.',wrong:'Әзірге қате. Түсіндірмені қарап, келесі тапсырмада ережені қолдан.',allDone:'Ұсынылған тапсырмалардың бәрін орындадың.',retry:'Қайта бастау',topics:[
+['Қозғалыс түрлері','Бірқалыпты қозғалыста дене тең уақыт аралықтарында бірдей жол жүреді. Тең уақыт ішінде жол әртүрлі болса, қозғалыс бірқалыпсыз болады. Траектория — дененің қозғалыс сызығы.','Әр секундта 3 м, 3 м, 3 м жүрсе — бірқалыпты қозғалыс. 2 м, 4 м, 6 м жүрсе — бірқалыпсыз.','Тең уақыт аралықтарындағы жолдарды салыстыр.'],
+['Жылдамдық, жол және уақыт','Жылдамдық дененің уақыт бірлігінде жүретін жолын көрсетеді. Формулалар: v = s / t, s = v · t, t = s / v. Өлшем бірліктерін тексер.','Автобус 2 сағатта 120 км жүрді. v = 120 / 2 = 60 км/сағ. км/сағ-ты м/с-қа айналдыру үшін 3,6-ға бөл; кері жағдайда 3,6-ға көбейт.','v = s / t; s = v · t; t = s / v'],
+['Орын ауыстыру және координата','Орын ауыстыру: sₓ = x − x₀. Таңба қозғалыс бағытын көрсетеді. Бірқалыпты қозғалыс теңдеуі: x = x₀ + vₓ · t. Жол траектория ұзындығын, орын ауыстыру бастапқы және соңғы орынды сипаттайды.','Дене x₀ = 2 м нүктесінен x = 8 м нүктесіне өтті. sₓ = 8 − 2 = 6 м. Егер соңғы координата −3 м болса, sₓ = −3 − 2 = −5 м.','sₓ = x − x₀; x = x₀ + vₓ · t'],
+['Орташа жылдамдық','Орташа жылдамдық бүкіл жолды барлық уақытқа бөлу арқылы табылады. Әртүрлі бөліктердегі жылдамдықтарды жай ғана орташа арифметикалықпен есептеуге болмайды.','Дене 2 сағатта 100 км, келесі 1 сағатта 60 км жүрді. Барлық жол 160 км, уақыт 3 сағат. vорт = 160 / 3 ≈ 53,3 км/сағ.','vорт = барлық жол / барлық уақыт']
+]}}
+function diagnostic(){
+ const d=LEARN[L],weak=S.sc.map((score,i)=>({score:score,i:i})).filter(x=>x.score<5);
+ S.learnTopics=weak.map(x=>x.i);S.learnScores=[0,0,0,0];S.learnTopicIdx=0;S.learnTaskIdx=0;S.learningFinished=false;
+ app().innerHTML='<div class="card">'+lb()+'<h2>'+d.diagnosis+'</h2><p><b>'+S.name+'</b></p><table>'+d.topics.map((x,i)=>'<tr><td>'+x[0]+'</td><td><b>'+S.sc[i]+'/6</b></td></tr>').join('')+'</table>'+
+ (weak.length?'<h3>'+d.weak+'</h3><ul>'+weak.map(x=>'<li>'+d.topics[x.i][0]+' — '+x.score+'/6</li>').join('')+'</ul><p>Әр тақырыпқа қысқаша түсіндірме, мысал және екі тапсырма беріледі. / Для каждой темы будут объяснение, пример и два задания.</p><button onclick="beginLearning()">'+d.start+'</button>':'<p class="ok">'+d.good+'</p><button onclick="S.learningFinished=true;learningResults()">'+d.skip+'</button>')+
+ '<p class="s">Нәтижелер тек осы бет ашық тұрған кезде сақталады. / Результаты существуют только пока открыта страница.</p></div>';
+}
+function beginLearning(){S.learnTopicIdx=0;S.learnTaskIdx=0;S.learnScores=[0,0,0,0];if(!S.learnTopics.length){S.learningFinished=true;learningResults();return}showLesson()}
+function showLesson(){
+ const d=LEARN[L],idx=S.learnTopics[S.learnTopicIdx],x=d.topics[idx];
+ app().innerHTML='<div class="card">'+lb()+'<p class="s">'+(S.learnTopicIdx+1)+'/'+S.learnTopics.length+'</p><h2>'+d.lesson+': '+x[0]+'</h2><h3>'+d.theory+'</h3><p>'+x[1]+'</p><h3>'+d.example+'</h3><div class="ex">'+x[2]+'<p><b>'+x[3]+'</b></p></div><button onclick="startLearningTasks()">'+d.practice+'</button></div>';
+}
+function makeLearningQuestion(topic){
+ if(topic===0)return g10(R(0,5));
+ if(topic===1)return g11(pick(['v','c1','c2','l','t']));
+ if(topic===2)return g12(pick(['sx','vx','x']));
+ return g13(pick(['a3','a4']));
+}
+function startLearningTasks(){S.learnTaskIdx=0;showLearningTask()}
+function showLearningTask(){
+ const d=LEARN[L],topic=S.learnTopics[S.learnTopicIdx];S.learnQ=makeLearningQuestion(topic);S.learnAnswered=false;
+ const q=S.learnQ,e=(id,w)=>'<input type="text" id="'+id+'" inputmode="decimal" autocomplete="off"'+(w?' style="width:4em"':'')+'>';
+ app().innerHTML='<div class="card">'+lb()+'<p class="s">'+d.topics[topic][0]+' · '+d.task+' '+(S.learnTaskIdx+1)+'/2</p><div class="q">'+txt3(q)+'</div>'+inp3(q,e)+'<div id="learnfb"></div><button id="learnbtn" onclick="checkLearningAnswer()">'+d.next+'</button></div>';
+ const first=$('i0');if(first&&first.type!=='hidden')first.focus();
+}
+function checkLearningAnswer(){
+ if(S.learnAnswered)return;
+ const d=LEARN[L],q=S.learnQ,v=[0,1].map(j=>$('i'+j)?$('i'+j).value:'');
+ const ok=chk3(q,v);S.learnAnswered=true;if(ok)S.learnScores[S.learnTopics[S.learnTopicIdx]]++;
+ $('learnfb').innerHTML='<p class="'+(ok?'ok':'no')+'">'+(ok?d.correct:d.wrong)+'</p>'+(!ok?'<div class="ex">'+expl3(q)+'</div>':'');
+ const b=$('learnbtn');b.textContent=S.learnTaskIdx===0?d.continue:d.finishTopic;b.onclick=nextLearningTask;
+ [0,1].forEach(j=>{if($('i'+j))$('i'+j).disabled=true});
+}
+function nextLearningTask(){if(S.learnTaskIdx===0){S.learnTaskIdx=1;showLearningTask();return}S.learnTopicIdx++;if(S.learnTopicIdx<S.learnTopics.length)showLesson();else{S.learningFinished=true;learningResults()}}
+function learningResults(){
+ const d=LEARN[L],total=S.learnTopics.reduce((a,i)=>a+S.learnScores[i],0),possible=S.learnTopics.length*2;
+ app().innerHTML='<div class="card">'+lb()+'<h2>'+d.final+'</h2><p><b>'+S.name+'</b></p><table><tr><th>Тақырып / Тема</th><th>'+d.initial+'</th><th>'+d.practiceScore+'</th></tr>'+d.topics.map((x,i)=>'<tr><td>'+x[0]+'</td><td>'+S.sc[i]+'/6</td><td>'+(S.learnTopics.includes(i)?S.learnScores[i]+'/2':'—')+'</td></tr>').join('')+'</table><p><b>'+d.done+': '+total+'/'+possible+'</b></p><p>'+d.allDone+'</p><p class="s">Нәтижелер сақталмайды / Результаты не сохраняются после обновления.</p><button onclick="home()">'+d.retry+'</button></div>';
+}
 const T3={ru:{sec1:'Величины и измерения',sec2:'Механическое движение',m:['Вид движения','Скорость, путь, время','Перемещение и координата','Средняя скорость'],eq:'Равномерное',ne:'Неравномерное',fa:'(v₁ + v₂) / 2',fb:'(l₁ + l₂) / (t₁ + t₂)',same:'Одинаковые пути за любые равные промежутки времени → равномерное движение',diff:'Разные пути за равные промежутки времени → неравномерное движение',cl0:'Начало и конец траектории совпадают → перемещение равно нулю',fx:'Средняя скорость = весь путь / всё время = (l₁ + l₂) / (t₁ + t₂). Это не среднее арифметическое скоростей',fm:'Какая формула верна для средней скорости?',
 ex:n=>`Какое это движение: ${n}?`,tb:(d,a)=>`За каждые ${d} с тело проходит пути (м): ${a.join('; ')}. Какое это движение?`,v:(l,t)=>`Автобус проехал ${l} км за ${t} ч. Найдите скорость`,c1:v=>`Переведите ${v} км/ч в м/с`,c2:v=>`Переведите ${v} м/с в км/ч`,l:(v,t)=>`Тело движется со скоростью ${v} км/ч. Какой путь оно пройдёт за ${t} мин? Ответ в метрах`,t:(v,l)=>`Тело движется со скоростью ${v} м/с. За какое время оно пройдёт ${l} км? Ответ в секундах`,sx:(a,b)=>`Тело переместилось из точки x₀ = ${a} м в точку x = ${b} м. Найдите проекцию перемещения sₓ`,vx:(a,b,t)=>`Тело переместилось из x₀ = ${a} м в x = ${b} м за ${t} с. Найдите проекцию скорости vₓ`,x:(a,v,t)=>`Закон движения: x = ${a} ${v<0?'−':'+'} ${Math.abs(v)}·t (м). Найдите координату через ${t} с`,xm:(a,v,t)=>`Пешеход: x₀ = ${a} м, vₓ = ${v} м/с. Найдите его координату через ${t} мин`,cl:n=>`Тело обошло стадион по замкнутой траектории длиной ${n} м и вернулось в начало. Найдите перемещение`,a2:(l,v1,v2)=>`Поезд прошёл ${l} км туда со скоростью ${v1} км/ч и ${l} км обратно со скоростью ${v2} км/ч. Найдите среднюю скорость (до десятых)`,a3:(t1,v1,t2,v2)=>`Первые ${t1} ч тело ехало со скоростью ${v1} км/ч, следующие ${t2} ч со скоростью ${v2} км/ч. Найдите среднюю скорость`,a4:(l1,t1,l2,t2)=>`Автобус прошёл ${l1} км за ${t1} ч, затем ${l2} км за ${t2} ч. Найдите среднюю скорость за всё время движения`,a5:(l1,t1,l2,t2)=>`Автобус прошёл ${l1} км за ${t1} ч, затем ${l2} км за ${t2} ч. Найдите среднюю скорость за всё время движения. Ответ в м/с`},
 kz:{sec1:'Шамалар және өлшеулер',sec2:'Механикалық қозғалыс',m:['Қозғалыс түрі','Жылдамдық, жол, уақыт','Орын ауыстыру және координата','Орташа жылдамдық'],eq:'Бірқалыпты',ne:'Бірқалыпсыз',fa:'(v₁ + v₂) / 2',fb:'(l₁ + l₂) / (t₁ + t₂)',same:'Кез келген тең уақыт аралығында жол бірдей → бірқалыпты қозғалыс',diff:'Тең уақыт аралықтарында жол әртүрлі → бірқалыпсыз қозғалыс',cl0:'Траекторияның басы мен соңы сәйкес → орын ауыстыру нөлге тең',fx:'Орташа жылдамдық = барлық жол / барлық уақыт = (l₁ + l₂) / (t₁ + t₂). Бұл жылдамдықтардың орта арифметикалығы емес',fm:'Орташа жылдамдықтың дұрыс формуласы қайсы?',
