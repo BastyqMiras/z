@@ -61,9 +61,9 @@ function home(){const t=T[L];S=null;app().innerHTML=`<div class="card">${lb()}<h
 <p><label><input type="checkbox" id="hn" checked> ${t.hn}</label></p><p class="s">${t.tip} · v3</p><button onclick="start(1)">${T3[L].sec1}</button><button onclick="start(2)">${T3[L].sec2}</button>
 <details style="margin-top:12px"><summary>${t.ch}</summary><table>${t.sh.map(s=>`<tr><td>${s}</td></tr>`).join('')}</table></details></div>`}
 function start(sec){const t=T[L],n=$('nm').value.trim();if(!n){alert(t.nn);return}S={name:n,hints:$('hn').checked,sec:sec,qs:sec==2?build2():build(),i:0,sc:sec==2?[0,0,0,0]:[0,0,0,0,0],view:'question'};show()}
-function show(){S.view='question';const t=T[L],q=S.qs[S.i];if(!q)return fin();const n=S.qs.length,e=(id,w)=>`<input type="text" id="${id}" inputmode="decimal" autocomplete="off"${w?` style="width:4em"`:''}>`;
+function show(){S.view='question';const t=T[L],q=S.qs[S.i];if(!q)return fin();const n=S.qs.length,e=(id,w)=>`<input type="text" id="${id}" inputmode="text" autocomplete="off"${w?` style="width:4em"`:''}>`;
 let inp=q.b>9?inp3(q,e):q.b>2?inp2(q,e):q.b==0&&q.kind=='to'?`${e('i0',1)} · 10<sup>${e('i1',1)}</sup>`:`${e('i0')} ${q.b==0?'':q.b==1?(q.A?q.u:q.p+q.u):U(q.t)}`;
-app().innerHTML=`<div class="card">${lb()}<div class="s">${nms()[bi(q)]} · ${S.i+1}/${n}</div><div class="bar"><i style="width:${S.i/n*100}%"></i></div><div class="q">${txt(q)}</div>${q.b==3?svg(q):''}${inp}<div><button class="g" onclick="ins('-')">− минус</button></div><div id="fb"></div><button id="bt" onclick="chk()">${t.chk}</button></div>`;$('i0').focus()}
+app().innerHTML=`<div class="card">${lb()}<div class="s">${nms()[bi(q)]} · ${S.i+1}/${n}</div><div class="bar"><i style="width:${S.i/n*100}%"></i></div><div class="q">${txt(q)}</div>${q.b==3?svg(q):''}${inp}<div><button class="g" onclick="insMinus()">− минус</button></div><div id="fb"></div><button id="bt" onclick="chk()">${t.chk}</button></div>`;$('i0').focus()}
 function chk(){const t=T[L],q=S.qs[S.i],v=[0,1].map(j=>$('i'+j)?$('i'+j).value:'');let ok;
 if(q.b>9)ok=chk3(q,v);else if(q.b>2)ok=chk2(q,v);else if(q.b==0&&q.kind=='to'){const a=P(v[0]);ok=close(a,q.m)&&a>=1&&a<10&&Number(v[1].replace(/[−–]/g,'-'))===q.e}else ok=close(P(v[0]),q.b==0?q.x:q.ans);
 S.d=S.d||{};if(ok&&!S.d[S.i])S.sc[bi(q)]++;S.d[S.i]=1;$('fb').innerHTML=`<p class="${ok?'ok':'no'}">${ok?t.ok:t.bad+atxt(q)}</p>${S.hints&&!ok?`<div class="ex">${expl(q)}</div>`:''}`;
@@ -133,7 +133,7 @@ ex:n=>`Бұл қандай қозғалыс: ${n}?`,tb:(d,a)=>`Дене әр ${d
 const ek={'эскалатор':'эскалатор','лента транспортёра':'конвейер лентасы','конец стрелки часов':'сағат тілінің ұшы','автомобиль в городе':'қаладағы автомобиль','пешеход':'жаяу жүргінші','мяч':'доп'};
 const EXS=[['эскалатор','eq'],['лента транспортёра','eq'],['конец стрелки часов','eq'],['автомобиль в городе','ne'],['пешеход','ne'],['мяч','ne']],CH1=[['eq','eq'],['ne','ne']],CHF=[['a','fa'],['b','fb']];
 const UN=k=>({kmh:'км/'+(L=='kz'?'сағ':'ч'),ms:'м/с',m:'м',s:'с'})[k],H=()=>L=='kz'?'сағ':'ч',ng=n=>n<0?`(${n})`:n,r1=x=>Math.round(x*10)/10,bi=q=>q.b>9?q.b-10:q.b,nms=()=>S.sec==2?T3[L].m:T[L].b;
-function g10(i){if(i<2){const e=pick(EXS);return{b:10,k:'ex',p:[e[0]],ans:e[1],ch:CH1,x:()=>T3[L][e[1]=='eq'?'same':'diff']}}
+function g10(i,example){if(i<2){const e=example||pick(EXS);return{b:10,k:'ex',p:[e[0]],ans:e[1],ch:CH1,x:()=>T3[L][e[1]=='eq'?'same':'diff']}}
 const eq=Math.random()<.5,d=pick([1,2,5]),p=R(2,9)*pick([1,2]),a=eq?[p,p,p,p]:pick([[p,p+2,p+4,p+6],[p+6,p+4,p+2,p],[p,p,p+3,p],[p,p+3,p,p+3]]);return{b:10,k:'tb',p:[d,a],ans:eq?'eq':'ne',ch:CH1,x:()=>T3[L][eq?'same':'diff']}}
 function g11(k){let q;
 if(k=='v'){const v=pick([30,40,45,50,60,72,80,90]),t=pick([2,3,4,5]),l=v*t;q={p:[l,t],ans:v,u:'kmh',x:()=>`v = l / t = ${l} / ${t} = ${v} ${UN('kmh')}`}}
@@ -156,7 +156,7 @@ else if(k=='a3'){const[t1,v1,t2,v2]=pick(A3),l1=v1*t1,l2=v2*t2,a=r1((l1+l2)/(t1+
 else if(k=='a4'||k=='a5'){const[l1,t1,l2,t2]=pick(k=='a4'?A4:A5),s=r1((l1+l2)/(t1+t2)),a=k=='a4'?s:cl(s/3.6);q={p:[l1,t1,l2,t2],ans:a,tol:.06,u:k=='a4'?'kmh':'ms',x:()=>`v = (${l1} + ${l2}) / (${t1} + ${t2}) = ${fmt(s)} ${UN('kmh')}`+(k=='a5'?`; ${fmt(s)} : 3,6 = ${fmt(a)} м/с`:'')}}
 else q={p:[],ans:'b',ch:CHF,x:()=>T3[L].fx};
 q.b=13;q.k=k;return q}
-const build2=()=>[0,1,2,3,4,5].map(g10).concat(['v','c1','c2','l','t','l'].map(g11),['sx','sx','vx','x','xm','cl'].map(g12),['a2','a2','a3','a4','a5','fm'].map(g13));
+const build2=()=>{const examples=sh(EXS);return [0,1,2,3,4,5].map(i=>g10(i,examples[i])).concat(['v','c1','c2','l','t','l'].map(g11),['sx','sx','vx','x','xm','cl'].map(g12),['a2','a2','a3','a4','a5','fm'].map(g13))};
 function txt3(q){const t=T3[L],p=q.k=='ex'&&L=='kz'?[ek[q.p[0]]]:q.p.map(x=>typeof x=='number'?fmt(x):x);return q.k=='fm'?t.fm:t[q.k](...p)}
 const atxt3=q=>q.ch?T3[L][q.ch.find(c=>c[0]==q.ans)[1]]:fmt(q.ans)+' '+UN(q.u),expl3=q=>q.x();
 function inp3(q,e){return q.ch?`<input type='hidden' id='i0'><div style='margin-top:8px'>${q.ch.map(([v,k])=>`<button class="g" onclick="pk(this,'${v}')">${T3[L][k]}</button>`).join('')}</div>`:`${e('i0')} ${UN(q.u)}`}
@@ -164,5 +164,6 @@ function pk(b,v){$('i0').value=v;[...b.parentNode.children].forEach(x=>x.style.c
 function chk3(q,v){return q.ch?v[0]==q.ans:q.tol?Math.abs(P(v[0])-q.ans)<=q.tol:close(P(v[0]),q.ans)}
 let LF=null;document.addEventListener('focusin',e=>{if(e.target.tagName=='INPUT'&&e.target.type=='text')LF=e.target});
 function ins(s){const i=LF&&document.body.contains(LF)?LF:$('i0');if(!i||i.disabled)return;const a=i.selectionStart==null?i.value.length:i.selectionStart,b=i.selectionEnd==null?a:i.selectionEnd;i.value=i.value.slice(0,a)+s+i.value.slice(b);i.focus();if(i.setSelectionRange)i.setSelectionRange(a+s.length,a+s.length)}
+function insMinus(){const i=LF&&document.body.contains(LF)&&LF.type==='text'&&!LF.disabled?LF:$('i0');if(!i||i.disabled||i.type==='hidden')return;const v=i.value.replace(/^[−–]/,'-');i.value=v.startsWith('-')?v.slice(1):'-'+v;i.focus();if(i.setSelectionRange)i.setSelectionRange(1,1)}
 document.addEventListener('keydown',e=>{if(e.key=='Enter'){const b=$('bt');if(b)b.click()}});home();
 </script></body></html>
