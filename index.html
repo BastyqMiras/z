@@ -1,238 +1,29 @@
-<!DOCTYPE html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><title>Тренажёр: перевод единиц</title><style>
-:root{--bg:#f6f7fb;--c:#fff;--t:#1d2433;--m:#667085;--a:#2f6fed;--ok:#1a9e55;--no:#d33;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
-@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#12151c;--c:#1c2130;--t:#e8ebf3;--m:#9aa3b5;--a:#6b9bff;--ok:#43c383;--no:#ff6b6b}}
-:root[data-theme="dark"]{--bg:#12151c;--c:#1c2130;--t:#e8ebf3;--m:#9aa3b5;--a:#6b9bff;--ok:#43c383;--no:#ff6b6b}
-html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;background:var(--bg);color:var(--t);font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
-.w{max-width:620px;margin:0 auto;padding:16px}.card{background:var(--c);border-radius:14px;padding:18px;box-shadow:0 1px 6px #0002}
-button{font:inherit;background:var(--a);color:#fff;border:0;border-radius:10px;padding:10px 18px;cursor:pointer;margin:6px 6px 0 0}button.g{background:transparent;color:var(--a);border:1px solid var(--a);padding:4px 12px}
-input[type=text]{font:inherit;padding:9px;border:1px solid var(--m);border-radius:8px;background:var(--bg);color:var(--t);width:8em;max-width:40%}
-.bar{height:8px;background:var(--bg);border-radius:6px;overflow:hidden;margin:8px 0}.bar i{display:block;height:100%;background:var(--a)}
-.q{font-size:1.2em;margin:14px 0}.ok{color:var(--ok)}.no{color:var(--no)}.ex{background:var(--bg);padding:10px;border-radius:8px}.s{color:var(--m);font-size:.9em}
-table{width:100%;border-collapse:collapse}td{padding:3px 0}
-
-/* Mobile-first visual refresh */
-:root{--bg:#f3f6fc;--c:#fff;--t:#17243a;--m:#1f2937;--a:#365cf5;--ok:#12805c;--no:#d14343;--line:#aebed6;box-sizing:border-box;color-scheme:light}
-*{box-sizing:border-box}
-html{min-height:100%;scroll-behavior:smooth}
-body{min-height:100vh;background:radial-gradient(ellipse at 8% 0%,#dfe8ff 0,transparent 34%),radial-gradient(ellipse at 95% 12%,#e2f8f2 0,transparent 28%),var(--bg);color:var(--t);font:16px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;-webkit-font-smoothing:antialiased}
-.w{width:100%;max-width:760px;margin:0 auto;padding:clamp(12px,3vw,28px)}
-.card{background:var(--c);border:1px solid rgba(177,191,214,.95);border-radius:24px;padding:clamp(18px,4vw,30px);box-shadow:0 14px 42px rgba(31,52,99,.10);overflow-wrap:anywhere}
-h2{font-size:clamp(1.45rem,5vw,2rem);line-height:1.2;letter-spacing:-.035em;margin:10px 0 18px;font-weight:800}
-h3{font-size:1.06rem;line-height:1.35;margin:22px 0 8px;letter-spacing:-.01em}
-p{margin:12px 0}
-.s{color:var(--m);font-size:.88rem;font-weight:600}
-button{font:inherit;font-weight:700;background:linear-gradient(135deg,#4167ff,#3150df);color:#fff;border:0;border-radius:14px;min-height:48px;padding:12px 18px;cursor:pointer;margin:8px 6px 0 0;box-shadow:0 5px 12px rgba(54,92,245,.16);transition:transform .15s ease,box-shadow .15s ease,filter .15s ease;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
-button:active{transform:scale(.985);filter:brightness(.97)}
-button:focus-visible,input:focus-visible{outline:3px solid #8fa3ff;outline-offset:2px}
-button.g{background:#c7d2e5;color:#0f172a;border:1px solid #8fa3c6;box-shadow:none;min-height:42px;padding:8px 13px;border-radius:12px;font-weight:700}
-button.g:hover{background:#b9c7df}
-input[type=text]{font:inherit;font-size:1.08rem;padding:13px 14px;border:1.5px solid #9fb1cb;border-radius:14px;background:#fff;color:var(--t);width:8em;max-width:100%;min-height:50px;box-shadow:inset 0 1px 2px rgba(25,40,80,.04)}
-input[type=text]:focus{border-color:var(--a);background:#fff;outline:none;box-shadow:0 0 0 4px rgba(54,92,245,.12)}
-input[type=checkbox]{width:19px;height:19px;accent-color:var(--a);vertical-align:middle}
-label{line-height:1.45}
-.bar{height:9px;background:#b8c7de;border-radius:99px;overflow:hidden;margin:12px 0 20px}
-.bar i{display:block;height:100%;background:linear-gradient(90deg,#4167ff,#26b6a0);border-radius:99px;transition:width .25s ease}
-.q{font-size:clamp(1.1rem,3.8vw,1.35rem);line-height:1.45;font-weight:700;letter-spacing:-.018em;margin:20px 0 18px}
-.ok,.no{font-weight:700;padding:12px 14px;border-radius:14px}
-.ok{color:#075f43;background:#dcefe6;border:1px solid #9dd2ba}
-.no{color:#9f2430;background:#f8dfe1;border:1px solid #e9adb2}
-.ex{background:#cfdbef;border:1px solid #9fb6d8;padding:14px 16px;border-radius:16px;margin:12px 0;color:#1f365d;line-height:1.65}
-table{width:100%;border-collapse:separate;border-spacing:0;margin:12px 0;overflow:hidden;border:1px solid var(--line);border-radius:14px;font-size:.95rem}
-th{background:#dde7f6;color:#1f365d;text-align:left;font-weight:750}
-td,th{padding:11px 12px;border-bottom:1px solid var(--line);vertical-align:top}
-tr:last-child td{border-bottom:0}
-td+td,th+th{text-align:right;font-variant-numeric:tabular-nums}
-details{background:#dbe3ef;border:1px solid var(--line);border-radius:14px;padding:12px 14px}
-summary{font-weight:700;cursor:pointer}
-ul{padding-left:1.25rem}
-li{margin:7px 0}
-.home-card{background:linear-gradient(145deg,#fff 0%,#eef3fb 65%,#e5f3ef 100%);border-color:#b8c7df}
-.home-card h2{font-size:clamp(1.7rem,6vw,2.35rem);max-width:560px;margin-top:18px}
-.home-card p:has(#nm){margin-top:22px}
-.home-card #nm{width:100%;max-width:100%;background:#fff}
-.home-card label{display:flex;align-items:center;gap:9px;padding:12px 14px;background:#d7e1f2;border:1px solid #b4c4dc;border-radius:14px}
-.home-card button[onclick^="start("]{display:flex;align-items:center;justify-content:center;width:100%;min-height:58px;margin:12px 0 0;text-align:center}
-.home-card button[onclick="start(1)"]{background:linear-gradient(135deg,#4167ff,#3150df)}
-.home-card button[onclick="start(2)"]{background:linear-gradient(135deg,#087f8c,#13a995);box-shadow:0 5px 12px rgba(8,127,140,.17)}
-.card>div[style*="text-align:right"]{display:flex;justify-content:flex-end;gap:6px}
-.card>div[style*="text-align:right"] button{margin:0;min-height:40px}
-.card>.q+div button.g,.card>.q+svg+div+div button.g{margin-top:4px}
-.card>button:not(.g){width:100%;margin:14px 0 0}
-.card>div:has(>button.g){display:flex;flex-wrap:wrap;gap:8px}
-.card>div:has(>button.g) button.g{margin:0;flex:1 1 auto}
-.card>div:has(>button.g) button.g:only-child{flex:0 1 auto}
-svg{max-width:100%;height:auto;margin:8px auto 18px!important}
-@media(min-width:600px){
- .w{padding:30px 22px}
- .card{padding:30px}
- .home-card button[onclick^="start("]{width:calc(50% - 8px);display:inline-flex;vertical-align:top;margin:12px 8px 0 0}
- .home-card button[onclick="start(2)"]{margin-right:0}
-}
-@media(max-width:420px){
- .w{padding:10px}
- .card{border-radius:20px;padding:16px}
- button{padding:12px 14px}
- .card>div[style*="text-align:right"] button{padding:7px 10px}
- td,th{padding:9px 8px;font-size:.88rem}
- .q{margin:18px 0 14px}
-}
-@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition:none!important}}
-</style></head><body><div class="w"><div id="app"></div></div><script>
-const BONUS=[[60,1],[80,2],[100,3]]; // [процент выполнения, бонусные баллы] — измените под себя
-let L='ru',S=null;
-const T={ru:{t:'Тренажёр: перевод единиц',nm:'Фамилия и имя',nn:'Введите фамилию и имя',hn:'Показывать разбор ошибок',go:'Начать',chk:'Проверить',nx:'Дальше',ok:'Верно!',bad:'Неверно. Правильный ответ: ',
-b:['Стандартный вид','Приставки','Перевод в СИ','Цена деления и погрешность','Объём тела (вытеснение)'],so:'значит',tip:'Можно писать так: 8·10^-6 или 0,000008',
-q1a:x=>`Запишите число ${x} в стандартном виде a · 10ⁿ (1 ≤ a < 10)`,q1b:x=>`Запишите число ${x} в обычном виде`,cv:'Переведите:',
-s1:k=>`Переносим запятую к первой значащей цифре: на ${Math.abs(k)} зн. ${k>0?'влево':'вправо'}, значит n = ${k}`,s2:k=>`n = ${k}: запятая сдвигается ${k>0?'вправо':'влево'} на ${Math.abs(k)} зн.`,
-res:'Результат',tot:'Итого',bon:'Бонус',shot:'Сделайте скриншот и покажите учителю',again:'Заново',ch:'Шпаргалка',
-sh:['к (кило) = 1000','М (мега) = 1 000 000','д (деци) = 0,1','с (санти) = 0,01','м (милли) = 0,001','мк (микро) = 0,000001','1 мл = 1 см³ = 0,000001 м³','1 т = 1000 кг, 1 кг = 1000 г']},
-kz:{t:'Тренажер: бірліктерді түрлендіру',nm:'Аты-жөні',nn:'Аты-жөніңізді жазыңыз',hn:'Қателер талдауын көрсету',go:'Бастау',chk:'Тексеру',nx:'Келесі',ok:'Дұрыс!',bad:'Қате. Дұрыс жауап: ',
-b:['Стандартты түр','Қосымшалар','ХБЖ-ге түрлендіру','Бөлік құны және қателік','Дене көлемі (ығыстыру)'],so:'демек',tip:'Былай жазуға болады: 8·10^-6 немесе 0,000008',
-q1a:x=>`${x} санын стандартты түрде жазыңыз a · 10ⁿ (1 ≤ a < 10)`,q1b:x=>`${x} санын қарапайым түрде жазыңыз`,cv:'Түрлендіріңіз:',
-s1:k=>`Үтірді бірінші мәнді цифрға дейін жылжытамыз: ${Math.abs(k)} орын ${k>0?'солға':'оңға'}, демек n = ${k}`,s2:k=>`n = ${k}: үтір ${Math.abs(k)} орын ${k>0?'оңға':'солға'} жылжиды`,
-res:'Нәтиже',tot:'Барлығы',bon:'Бонус',shot:'Скриншот жасап, мұғалімге көрсетіңіз',again:'Қайта бастау',ch:'Көмекші кесте',
-sh:['к (кило) = 1000','М (мега) = 1 000 000','д (деци) = 0,1','с (санти) = 0,01','м (милли) = 0,001','мк (микро) = 0,000001','1 мл = 1 см³ = 0,000001 м³','1 т = 1000 кг, 1 кг = 1000 г']}};
-const sup='⁰¹²³⁴⁵⁶⁷⁸⁹',SP=k=>String(k).replace('-','⁻').replace(/\d/g,d=>sup[d]);
-const R=(a,b)=>a+Math.floor(Math.random()*(b-a+1)),pick=a=>a[R(0,a.length-1)],cl=x=>parseFloat(x.toPrecision(12)),
-fmt=x=>cl(x).toFixed(12).replace(/\.?0+$/,'').replace('.',','),sh=a=>a.map(x=>[Math.random(),x]).sort((p,q)=>p[0]-q[0]).map(x=>x[1]),
-U=u=>L=='kz'&&u=='ч'?'сағ':u,close=(x,y)=>Math.abs(x-y)<=Math.abs(y)*1e-9;
-function P(s){s=String(s).trim().replace(/[а-яёәіңғүұқөһ/]+[²³]?\.?$/i,'').replace(/\s+/g,'').replace(/,/g,'.').replace(/[−–]/g,'-').replace(/⁻?[⁰¹²³⁴⁵⁶⁷⁸⁹]+/g,m=>'^'+m.replace('⁻','-').replace(/[⁰¹²³⁴⁵⁶⁷⁸⁹]/g,c=>sup.indexOf(c)));
-let m;if(m=s.match(/^(-?\d*\.?\d+)[·x×*]?10\^(-?\d+)$/))return +m[1]*Math.pow(10,+m[2]);if(/^-?\d*\.?\d+(e-?\d+)?$/i.test(s))return +s;return NaN}
-const PF=[['к',1000],['М',1e6],['д',.1],['с',.01],['м',.001],['мк',1e-6]],CV=[['км','м',1000],['см','м',.01],['мм','м',.001],['г','кг',.001],['кг','г',1000],['т','кг',1000],['мг','кг',1e-6],['мин','с',60],['ч','с',3600],['мл','м³',1e-6],['см³','м³',1e-6],['л','м³',.001]];
-function g0(){const e=pick([-5,-4,-3,-2,-1,2,3,4,5,6]),m=pick([1.2,2,3.5,4.5,5,6.4,7.2,8,9.1]);return{b:0,kind:Math.random()<.6?'to':'from',e,m,x:cl(m*Math.pow(10,e))}}
-function g1(){const[p,pf]=pick(PF),u=pick(['м','г','Н']),A=Math.random()<.5,n=pick([2,3,4.5,5,7,12,25,40]);return{b:1,p,pf,u,A,v:A?n:cl(n*pf),ans:A?cl(n*pf):n}}
-function g2(c){const[f,t,fac]=c;let v;do v=pick([2,5,8,12,25,45,350,3.5,1.5,.4]);while(cl(v*fac)<1e-6);return{b:2,f,t,fac,v,ans:cl(v*fac)}}
-const build=()=>[...Array(6)].map(g0).concat([...Array(6)].map(g1),sh(CV).slice(0,6).map(g2),['cd','cd','v','v','rec','rec'].map(g3),['vol','vol','one','one','si','si'].map(g4));
-function txt(q){const t=T[L];if(q.b>9)return txt3(q);if(q.b>2)return txt2(q);if(q.b==0)return q.kind=='to'?t.q1a(fmt(q.x)):t.q1b(fmt(q.m)+' · 10'+SP(q.e));
-if(q.b==1)return `${t.cv} ${fmt(q.v)} ${q.A?q.p+q.u:q.u} = ? ${q.A?q.u:q.p+q.u}`;return `${t.cv} ${fmt(q.v)} ${U(q.f)} = ? ${U(q.t)}`}
-function atxt(q){if(q.b>9)return atxt3(q);if(q.b>2)return atxt2(q);return q.b==0?(q.kind=='to'?fmt(q.m)+' · 10'+SP(q.e):fmt(q.x)):fmt(q.ans)}
-function expl(q){const t=T[L];if(q.b>9)return expl3(q);if(q.b>2)return expl2(q);if(q.b==0)return (q.kind=='to'?t.s1(q.e):t.s2(q.e))+`<br>${fmt(q.x)} = ${fmt(q.m)} · 10${SP(q.e)}`;
-if(q.b==1)return `1 ${q.p}${q.u} = ${fmt(q.pf)} ${q.u}; ${t.so}: ${fmt(q.v)} ${q.A?'·':':'} ${fmt(q.pf)} = ${fmt(q.ans)}`;
-return `1 ${U(q.f)} = ${fmt(q.fac)} ${U(q.t)}; ${t.so}: ${fmt(q.v)} · ${fmt(q.fac)} = ${fmt(q.ans)}`}
-const T2={ru:{c:'Определите цену деления мензурки (мл)',v:'Определите объём жидкости в мензурке (мл)',r:'Запишите результат измерения с учётом погрешности (ΔV = ±½ ЦД):',cd:'ЦД',a:(a,b)=>`В мензурку с водой ${a} мл погрузили тело, уровень поднялся до ${b} мл. Найдите объём тела (см³)`,o:(n,a,b)=>`В мензурке ${a} мл воды. После погружения ${n} одинаковых шариков уровень стал ${b} мл. Найдите объём одного шарика (см³)`,s:(a,b)=>`При погружении тела уровень воды в мензурке поднялся с ${a} мл до ${b} мл. Выразите объём тела в м³`},
-kz:{c:'Мензурканың бөлік құнын (БҚ) анықтаңыз (мл)',v:'Мензуркадағы сұйықтықтың көлемін анықтаңыз (мл)',r:'Өлшеу нәтижесін қателікті ескере отырып жазыңыз (ΔV = ±½ БҚ):',cd:'БҚ',a:(a,b)=>`Мензуркадағы ${a} мл суға дене батырылды, деңгей ${b} мл болды. Дененің көлемін табыңыз (см³)`,o:(n,a,b)=>`Мензуркада ${a} мл су бар. ${n} бірдей шар батырылғаннан кейін деңгей ${b} мл болды. Бір шардың көлемін табыңыз (см³)`,s:(a,b)=>`Дене батырылғанда мензуркадағы су деңгейі ${a} мл-ден ${b} мл-ге көтерілді. Дененің көлемін м³-пен өрнектеңіз`}};
-function g3(sub){const cd=pick([1,2,5]),max=pick([50,60,80,100]),V=cd*R(Math.ceil(15/cd),Math.floor((max-5)/cd));return{b:3,sub,cd,max,V,lo:10*R(0,max/10-1),ans:sub=='cd'?cd:V}}
-function g4(sub){const vb=sub=='one'?R(2,9):R(12,48),n=sub=='one'?R(2,5):1,V1=R(30,50);return{b:4,sub,vb,n,V1,V2:V1+n*vb,ans:sub=='si'?cl(vb*1e-6):vb}}
-function svg(q){const Y=v=>(240-v/q.max*220).toFixed(1);let s=`<svg viewBox='0 0 160 260' width='160' height='260' style='display:block;margin:0 auto' stroke='currentColor' fill='none'><rect x='41' y='${Y(q.V)}' width='58' height='${(240-Y(q.V)).toFixed(1)}' fill='#4aa3ff' fill-opacity='.55' stroke='none'/><rect x='40' y='20' width='60' height='220' stroke-width='2'/><text x='108' y='30' font-size='12' fill='currentColor' stroke='none'>мл</text>`;
-for(let v=0;v<=q.max;v+=q.cd){const lg=v%10==0;s+=`<line x1='40' x2='${lg?58:48}' y1='${Y(v)}' y2='${Y(v)}' stroke-width='1'/>`;if(lg)s+=`<text x='36' y='${(+Y(v)+4).toFixed(1)}' font-size='11' fill='currentColor' stroke='none' text-anchor='end'>${v}</text>`}
-return s+'</svg>'}
-function inp2(q,e){return q.sub=='rec'?`( ${e('i0',1)} ± ${e('i1',1)} ) мл`:`${e('i0')} ${q.b==3?'мл':q.sub=='si'?'м³':'см³'}`}
-function chk2(q,v){return q.sub=='rec'?close(P(v[0]),q.V)&&close(P(v[1]),q.cd/2):close(P(v[0]),q.ans)}
-function txt2(q){const t=T2[L];if(q.b==3)return q.sub=='cd'?t.c:q.sub=='v'?t.v:t.r;return q.sub=='vol'?t.a(q.V1,q.V2):q.sub=='one'?t.o(q.n,q.V1,q.V2):t.s(q.V1,q.V2)}
-function atxt2(q){return q.b==3&&q.sub=='rec'?`(${fmt(q.V)} ± ${fmt(q.cd/2)})`:fmt(q.ans)}
-function expl2(q){const t=T2[L];if(q.b==3){const c=`${t.cd} = (${q.lo+10} − ${q.lo}) / ${10/q.cd} = ${fmt(q.cd)}`;return q.sub=='cd'?c:q.sub=='v'?`${c}; V = ${q.V}`:`${c}; ΔV = ½ · ${t.cd} = ${fmt(q.cd/2)}; V = (${q.V} ± ${fmt(q.cd/2)})`}
-const d=`${q.V2} − ${q.V1} = ${q.n*q.vb}`;return q.sub=='vol'?`V = ${d} мл = ${q.vb} см³`:q.sub=='one'?`(${d}) / ${q.n} = ${q.vb} см³`:`V = ${d} мл = ${q.vb} см³; 1 см³ = 0,000001 м³; ${q.vb} · 0,000001 = ${fmt(q.ans)} м³`}
-const $=id=>document.getElementById(id),app=()=>$('app');
-function setLang(l){const view=S&&S.view,values=(view==='question'||view==='learningTask')?[0,1].map(j=>$('i'+j)?$('i'+j).value:''):null,answered=view==='question'?!!(S.d&&S.d[S.i]):view==='learningTask'&&!!S.learnAnswered;L=l;if(!S){home();return}switch(view){case 'diagnostic':diagnostic();break;case 'lesson':showLesson();break;case 'learningTask':showLearningTask(true);if(values)[0,1].forEach(j=>{if($('i'+j)&&$('i'+j).type!=='hidden')$('i'+j).value=values[j]});break;case 'learningResults':learningResults();break;case 'results':fin();break;default:show();if(values)[0,1].forEach(j=>{if($('i'+j)&&$('i'+j).type!=='hidden')$('i'+j).value=values[j]});if(answered)restoreAnsweredQuestion()}}
-const lb=()=>`<div style="text-align:right"><button class="g" onclick="setLang('ru')">РУС</button><button class="g" onclick="setLang('kz')">ҚАЗ</button></div>`;
-function home(){const t=T[L];S=null;app().innerHTML=`<div class="card home-card">${lb()}<h2>📏 ${t.t}</h2><p><input type="text" id="nm" placeholder="${t.nm}" style="width:100%;max-width:100%"></p>
-<p><label><input type="checkbox" id="hn" checked> ${t.hn}</label></p><p class="s">${t.tip} · v3</p><button onclick="start(1)">${T3[L].sec1}</button><button onclick="start(2)">${T3[L].sec2}</button>
-<details style="margin-top:12px"><summary>${t.ch}</summary><table>${t.sh.map(s=>`<tr><td>${s}</td></tr>`).join('')}</table></details></div>`}
-function start(sec){const t=T[L],n=$('nm').value.trim();if(!n){alert(t.nn);return}S={name:n,hints:$('hn').checked,sec:sec,qs:sec==2?build2():build(),i:0,sc:sec==2?[0,0,0,0]:[0,0,0,0,0],view:'question'};show()}
-function show(){S.view='question';const t=T[L],q=S.qs[S.i];if(!q)return fin();const n=S.qs.length,e=(id,w)=>`<input type="text" id="${id}" inputmode="text" autocomplete="off"${w?` style="width:4em"`:''}>`;
-let inp=q.b>9?inp3(q,e):q.b>2?inp2(q,e):q.b==0&&q.kind=='to'?`${e('i0',1)} · 10<sup>${e('i1',1)}</sup>`:`${e('i0')} ${q.b==0?'':q.b==1?(q.A?q.u:q.p+q.u):U(q.t)}`;
-app().innerHTML=`<div class="card question-card">${lb()}<div class="s">${nms()[bi(q)]} · ${S.i+1}/${n}</div><div class="bar"><i style="width:${S.i/n*100}%"></i></div><div class="q">${txt(q)}</div>${q.b==3?svg(q):''}${inp}<div><button class="g" onclick="insMinus()">− минус</button></div><div id="fb"></div><button id="bt" onclick="chk()">${t.chk}</button></div>`;$('i0').focus()}
-function chk(){const t=T[L],q=S.qs[S.i],v=[0,1].map(j=>$('i'+j)?$('i'+j).value:'');let ok;
-if(q.b>9)ok=chk3(q,v);else if(q.b>2)ok=chk2(q,v);else if(q.b==0&&q.kind=='to'){const a=P(v[0]);ok=close(a,q.m)&&a>=1&&a<10&&Number(v[1].replace(/[−–]/g,'-'))===q.e}else ok=close(P(v[0]),q.b==0?q.x:q.ans);
-S.d=S.d||{};if(ok&&!S.d[S.i])S.sc[bi(q)]++;S.d[S.i]=1;S.lastOk=ok;S.lastV=v;$('fb').innerHTML=`<p class="${ok?'ok':'no'}">${ok?t.ok:t.bad+atxt(q)}</p>${S.hints&&!ok?`<div class="ex">${expl(q)}</div>`:''}`;
-const b=$('bt');b.textContent=t.nx;b.onclick=()=>{S.i++;show()};[0,1].forEach(j=>$('i'+j)&&($('i'+j).disabled=true))}
-function fin(){
- if(S.sec==2 && !S.diagnosticDone){diagnostic();return}
- if(S.sec==2 && S.learningFinished){learningResults();return}
- S.view='results';const t=T[L],tot=S.sc.reduce((a,b)=>a+b,0),n=S.qs.length,pc=Math.round(tot/n*100);let bn=0;BONUS.forEach(([p,b])=>{if(pc>=p)bn=b});
- app().innerHTML=`<div class="card results-card">${lb()}<h2>${t.res}</h2><p><b>${S.name}</b> · ${new Date().toLocaleDateString(L=='kz'?'kk-KZ':'ru-RU')}</p><table>${nms().map((x,i)=>`<tr><td>${x}</td><td>${S.sc[i]}/6</td></tr>`).join('')}
- <tr><td><b>${t.tot}</b></td><td><b>${tot}/${n} (${pc}%)</b></td></tr><tr><td>${t.bon}</td><td>+${bn}</td></tr></table><p class="s">📸 ${t.shot}</p><button onclick="home()">${t.again}</button></div>`
-}
-const LEARN={
-ru:{title:'Персональная тренировка',diagnosis:'Результаты диагностики',weak:'Темы для повторения',good:'Отлично! Все темы усвоены достаточно хорошо.',start:'Начать работу над ошибками',skip:'Завершить',lesson:'Разберём тему',theory:'Коротко о главном',example:'Разобранный пример',practice:'Перейти к заданиям',task:'Задание',next:'Проверить ответ',continue:'Следующее задание',finishTopic:'Перейти к следующей теме',final:'Результат после тренировки',initial:'Диагностика',practiceScore:'Правильно в тренировке',done:'Тренировка завершена',correct:'Верно! Хорошо усвоено.',wrong:'Пока неверно. Посмотри разбор и примени правило в следующем задании.',allDone:'Ты прошёл все рекомендованные задания.',retry:'Начать заново',explainIntro:'Для каждой темы будут краткое объяснение, разобранный пример и два задания.',temporary:'Результаты сохраняются только пока открыта эта страница.',topicLabel:'Тема',notSaved:'Результаты не сохраняются после обновления страницы.',topics:[
-['Виды движения','При равномерном движении тело проходит одинаковые пути за равные промежутки времени. Если пути за равные промежутки различаются — движение неравномерное. Траектория — линия движения тела.','Например: 3 м, 3 м, 3 м за каждую секунду — равномерное движение. 2 м, 4 м, 6 м — неравномерное.','Сравнивай пути за одинаковые промежутки времени.'],
-['Скорость, путь и время','Скорость показывает, какой путь тело проходит за единицу времени. Формулы: v = s / t, s = v · t, t = s / v. Проверь единицы измерения перед расчётом.','Автобус проехал 120 км за 2 ч. v = 120 / 2 = 60 км/ч. Для перевода км/ч в м/с раздели на 3,6; для обратного перевода умножь на 3,6.','v = s / t; s = v · t; t = s / v'],
-['Перемещение и координата','Перемещение по оси: sₓ = x − x₀. Знак показывает направление. Координата при равномерном движении: x = x₀ + vₓ · t. Путь — длина траектории, а перемещение учитывает начальное и конечное положение.','Тело перешло из x₀ = 2 м в x = 8 м. sₓ = 8 − 2 = 6 м. Если конечная координата −3 м, sₓ = −3 − 2 = −5 м.','sₓ = x − x₀; x = x₀ + vₓ · t'],
-['Средняя скорость','Средняя скорость за весь путь равна общему пути, делённому на общее время. Не усредняй скорости простым сложением, если участки отличаются по длине или времени.','За 2 ч тело прошло 100 км, затем за 1 ч — 60 км. Общий путь 160 км, время 3 ч. vср = 160 / 3 ≈ 53,3 км/ч.','vср = весь путь / всё время']
-]},
-kz:{title:'Жеке жаттығу',diagnosis:'Диагностика нәтижелері',weak:'Қайталау қажет тақырыптар',good:'Жарайсың! Барлық тақырыптар жеткілікті меңгерілген.',start:'Қателермен жұмысты бастау',skip:'Аяқтау',lesson:'Тақырыпты қайталайық',theory:'Негізгі түсінік',example:'Шешу үлгісі',practice:'Тапсырмаларға өту',task:'Тапсырма',next:'Жауапты тексеру',continue:'Келесі тапсырма',finishTopic:'Келесі тақырыпқа өту',final:'Жаттығудан кейінгі нәтиже',initial:'Диагностика',practiceScore:'Жаттығуда дұрыс',done:'Жаттығу аяқталды',correct:'Дұрыс! Жақсы меңгердің.',wrong:'Әзірге қате. Түсіндірмені қарап, келесі тапсырмада ережені қолдан.',allDone:'Ұсынылған тапсырмалардың бәрін орындадың.',retry:'Қайта бастау',explainIntro:'Әр тақырып бойынша қысқаша түсіндірме, шығарылған мысал және екі тапсырма беріледі.',temporary:'Нәтижелер тек осы бет ашық тұрған кезде сақталады.',topicLabel:'Тақырып',notSaved:'Бет жаңартылғаннан кейін нәтижелер сақталмайды.',topics:[
-['Қозғалыс түрлері','Бірқалыпты қозғалыста дене тең уақыт аралықтарында бірдей жол жүреді. Тең уақыт ішінде жол әртүрлі болса, қозғалыс бірқалыпсыз болады. Траектория — дененің қозғалыс сызығы.','Әр секундта 3 м, 3 м, 3 м жүрсе — бірқалыпты қозғалыс. 2 м, 4 м, 6 м жүрсе — бірқалыпсыз.','Тең уақыт аралықтарындағы жолдарды салыстыр.'],
-['Жылдамдық, жол және уақыт','Жылдамдық дененің уақыт бірлігінде жүретін жолын көрсетеді. Формулалар: v = s / t, s = v · t, t = s / v. Өлшем бірліктерін тексер.','Автобус 2 сағатта 120 км жүрді. v = 120 / 2 = 60 км/сағ. км/сағ-ты м/с-қа айналдыру үшін 3,6-ға бөл; кері жағдайда 3,6-ға көбейт.','v = s / t; s = v · t; t = s / v'],
-['Орын ауыстыру және координата','Орын ауыстыру: sₓ = x − x₀. Таңба қозғалыс бағытын көрсетеді. Бірқалыпты қозғалыс теңдеуі: x = x₀ + vₓ · t. Жол траектория ұзындығын, орын ауыстыру бастапқы және соңғы орынды сипаттайды.','Дене x₀ = 2 м нүктесінен x = 8 м нүктесіне өтті. sₓ = 8 − 2 = 6 м. Егер соңғы координата −3 м болса, sₓ = −3 − 2 = −5 м.','sₓ = x − x₀; x = x₀ + vₓ · t'],
-['Орташа жылдамдық','Орташа жылдамдық бүкіл жолды барлық уақытқа бөлу арқылы табылады. Әртүрлі бөліктердегі жылдамдықтарды жай ғана орташа арифметикалықпен есептеуге болмайды.','Дене 2 сағатта 100 км, келесі 1 сағатта 60 км жүрді. Барлық жол 160 км, уақыт 3 сағат. vорт = 160 / 3 ≈ 53,3 км/сағ.','vорт = барлық жол / барлық уақыт']
-]}}
-function diagnostic(){
- S.view='diagnostic';S.diagnosticDone=true;const d=LEARN[L],weak=S.sc.map((score,i)=>({score:score,i:i})).filter(x=>x.score<5);
- S.learnTopics=weak.map(x=>x.i);S.learnScores=[0,0,0,0];S.learnTopicIdx=0;S.learnTaskIdx=0;S.learningFinished=false;
- app().innerHTML='<div class="card">'+lb()+'<h2>'+d.diagnosis+'</h2><p><b>'+S.name+'</b></p><table>'+d.topics.map((x,i)=>'<tr><td>'+x[0]+'</td><td><b>'+S.sc[i]+'/6</b></td></tr>').join('')+'</table>'+
- (weak.length?'<h3>'+d.weak+'</h3><ul>'+weak.map(x=>'<li>'+d.topics[x.i][0]+' — '+x.score+'/6</li>').join('')+'</ul><p>' + d.explainIntro + '</p><button onclick="beginLearning()">'+d.start+'</button>':'<p class="ok">'+d.good+'</p><button onclick="S.learningFinished=true;learningResults()">'+d.skip+'</button>')+
- '<p class="s">' + d.temporary + '</p></div>';
-}
-function beginLearning(){S.learnTopicIdx=0;S.learnTaskIdx=0;S.learnScores=[0,0,0,0];if(!S.learnTopics.length){S.learningFinished=true;learningResults();return}showLesson()}
-function showLesson(){
- S.view='lesson';const d=LEARN[L],idx=S.learnTopics[S.learnTopicIdx],x=d.topics[idx];
- app().innerHTML='<div class="card">'+lb()+'<p class="s">'+(S.learnTopicIdx+1)+'/'+S.learnTopics.length+'</p><h2>'+d.lesson+': '+x[0]+'</h2><h3>'+d.theory+'</h3><p>'+x[1]+'</p><h3>'+d.example+'</h3><div class="ex">'+x[2]+'<p><b>'+x[3]+'</b></p></div><button onclick="startLearningTasks()">'+d.practice+'</button></div>';
-}
-function makeLearningQuestion(topic){
- if(topic===0)return g10(R(0,5));
- if(topic===1)return g11(pick(['v','c1','c2','l','t']));
- if(topic===2)return g12(pick(['sx','vx','x']));
- return g13(pick(['a3','a4']));
-}
-function startLearningTasks(){S.learnTaskIdx=0;showLearningTask()}
-function showLearningTask(keepQ=false){
- S.view='learningTask';const d=LEARN[L],topic=S.learnTopics[S.learnTopicIdx];if(!keepQ){S.learnQ=makeLearningQuestion(topic);S.learnAnswered=false;}
- const q=S.learnQ,e=(id,w)=>'<input type="text" id="'+id+'" inputmode="decimal" autocomplete="off"'+(w?' style="width:4em"':'')+'>';
- app().innerHTML='<div class="card">'+lb()+'<p class="s">'+d.topics[topic][0]+' · '+d.task+' '+(S.learnTaskIdx+1)+'/2</p><div class="q">'+txt3(q)+'</div>'+inp3(q,e)+'<div><button class="g" onclick="insMinus()">± знак</button></div><div id="learnfb"></div><button id="learnbtn" onclick="checkLearningAnswer()">'+d.next+'</button></div>';
- if(keepQ&&S.learnAnswered){$('learnfb').innerHTML='<p class="'+(S.learnLastOk?'ok':'no')+'">'+(S.learnLastOk?d.correct:d.wrong)+'</p>'+(!S.learnLastOk?'<div class="ex">'+expl3(q)+'</div>':'');const b=$('learnbtn');b.textContent=S.learnTaskIdx===0?d.continue:d.finishTopic;b.onclick=nextLearningTask;[0,1].forEach(j=>{if($('i'+j))$('i'+j).disabled=true})}const first=$('i0');if(first&&first.type!=='hidden'&&!S.learnAnswered)first.focus();
-}
-function checkLearningAnswer(){
- if(S.learnAnswered)return;
- const d=LEARN[L],q=S.learnQ,v=[0,1].map(j=>$('i'+j)?$('i'+j).value:'');
- const ok=chk3(q,v);S.learnAnswered=true;S.learnLastOk=ok;S.learnLastV=v;if(ok)S.learnScores[S.learnTopics[S.learnTopicIdx]]++;
- $('learnfb').innerHTML='<p class="'+(ok?'ok':'no')+'">'+(ok?d.correct:d.wrong)+'</p>'+(!ok?'<div class="ex">'+expl3(q)+'</div>':'');
- const b=$('learnbtn');b.textContent=S.learnTaskIdx===0?d.continue:d.finishTopic;b.onclick=nextLearningTask;
- [0,1].forEach(j=>{if($('i'+j))$('i'+j).disabled=true});
-}
-function nextLearningTask(){if(S.learnTaskIdx===0){S.learnTaskIdx=1;showLearningTask();return}S.learnTopicIdx++;if(S.learnTopicIdx<S.learnTopics.length)showLesson();else{S.learningFinished=true;learningResults()}}
-function learningResults(){
- S.view='learningResults';const d=LEARN[L],total=S.learnTopics.reduce((a,i)=>a+S.learnScores[i],0),possible=S.learnTopics.length*2;
- app().innerHTML='<div class="card">'+lb()+'<h2>'+d.final+'</h2><p><b>'+S.name+'</b></p><table><tr><th>'+d.topicLabel+'</th><th>'+d.initial+'</th><th>'+d.practiceScore+'</th></tr>'+d.topics.map((x,i)=>'<tr><td>'+x[0]+'</td><td>'+S.sc[i]+'/6</td><td>'+(S.learnTopics.includes(i)?S.learnScores[i]+'/2':'—')+'</td></tr>').join('')+'</table><p><b>'+d.done+': '+total+'/'+possible+'</b></p><p>'+d.allDone+'</p><p class="s">' + d.notSaved + '</p><button onclick="home()">'+d.retry+'</button></div>';
-}
-const T3={ru:{sec1:'Величины и измерения',sec2:'Механическое движение',m:['Вид движения','Скорость, путь, время','Перемещение и координата','Средняя скорость'],eq:'Равномерное',ne:'Неравномерное',fa:'(v₁ + v₂) / 2',fb:'(l₁ + l₂) / (t₁ + t₂)',same:'Одинаковые пути за любые равные промежутки времени → равномерное движение',diff:'Разные пути за равные промежутки времени → неравномерное движение',cl0:'Начало и конец траектории совпадают → перемещение равно нулю',fx:'Средняя скорость = весь путь / всё время = (l₁ + l₂) / (t₁ + t₂). Это не среднее арифметическое скоростей',fm:'Какая формула верна для средней скорости?',
-ex:n=>`Какое это движение: ${n}?`,tb:(d,a)=>`За каждые ${d} с тело проходит пути (м): ${a.join('; ')}. Какое это движение?`,v:(l,t)=>`Автобус проехал ${l} км за ${t} ч. Найдите скорость`,c1:v=>`Переведите ${v} км/ч в м/с`,c2:v=>`Переведите ${v} м/с в км/ч`,l:(v,t)=>`Тело движется со скоростью ${v} км/ч. Какой путь оно пройдёт за ${t} мин? Ответ в метрах`,t:(v,l)=>`Тело движется со скоростью ${v} м/с. За какое время оно пройдёт ${l} км? Ответ в секундах`,sx:(a,b)=>`Тело переместилось из точки x₀ = ${a} м в точку x = ${b} м. Найдите проекцию перемещения sₓ`,vx:(a,b,t)=>`Тело переместилось из x₀ = ${a} м в x = ${b} м за ${t} с. Найдите проекцию скорости vₓ`,x:(a,v,t)=>`Закон движения: x = ${a} ${v<0?'−':'+'} ${Math.abs(v)}·t (м). Найдите координату через ${t} с`,xm:(a,v,t)=>`Пешеход: x₀ = ${a} м, vₓ = ${v} м/с. Найдите его координату через ${t} мин`,cl:n=>`Тело обошло стадион по замкнутой траектории длиной ${n} м и вернулось в начало. Найдите перемещение`,a2:(l,v1,v2)=>`Поезд прошёл ${l} км туда со скоростью ${v1} км/ч и ${l} км обратно со скоростью ${v2} км/ч. Найдите среднюю скорость (до десятых)`,a3:(t1,v1,t2,v2)=>`Первые ${t1} ч тело ехало со скоростью ${v1} км/ч, следующие ${t2} ч со скоростью ${v2} км/ч. Найдите среднюю скорость`,a4:(l1,t1,l2,t2)=>`Автобус прошёл ${l1} км за ${t1} ч, затем ${l2} км за ${t2} ч. Найдите среднюю скорость за всё время движения`,a5:(l1,t1,l2,t2)=>`Автобус прошёл ${l1} км за ${t1} ч, затем ${l2} км за ${t2} ч. Найдите среднюю скорость за всё время движения. Ответ в м/с`},
-kz:{sec1:'Шамалар және өлшеулер',sec2:'Механикалық қозғалыс',m:['Қозғалыс түрі','Жылдамдық, жол, уақыт','Орын ауыстыру және координата','Орташа жылдамдық'],eq:'Бірқалыпты',ne:'Бірқалыпсыз',fa:'(v₁ + v₂) / 2',fb:'(l₁ + l₂) / (t₁ + t₂)',same:'Кез келген тең уақыт аралығында жол бірдей → бірқалыпты қозғалыс',diff:'Тең уақыт аралықтарында жол әртүрлі → бірқалыпсыз қозғалыс',cl0:'Траекторияның басы мен соңы сәйкес → орын ауыстыру нөлге тең',fx:'Орташа жылдамдық = барлық жол / барлық уақыт = (l₁ + l₂) / (t₁ + t₂). Бұл жылдамдықтардың орта арифметикалығы емес',fm:'Орташа жылдамдықтың дұрыс формуласы қайсы?',
-ex:n=>`Бұл қандай қозғалыс: ${n}?`,tb:(d,a)=>`Дене әр ${d} с сайын мынадай жол жүреді (м): ${a.join('; ')}. Бұл қандай қозғалыс?`,v:(l,t)=>`Автобус ${t} сағ ішінде ${l} км жүрді. Жылдамдығын табыңыз`,c1:v=>`${v} км/сағ жылдамдықты м/с-қа түрлендіріңіз`,c2:v=>`${v} м/с жылдамдықты км/сағ-қа түрлендіріңіз`,l:(v,t)=>`Дене ${v} км/сағ жылдамдықпен қозғалады. ${t} мин ішінде қандай жол жүреді? Жауабы метрмен`,t:(v,l)=>`Дене ${v} м/с жылдамдықпен қозғалады. ${l} км жолды қанша уақытта жүреді? Жауабы секундпен`,sx:(a,b)=>`Дене x₀ = ${a} м нүктесінен x = ${b} м нүктесіне орын ауыстырды. Орын ауыстыру проекциясын sₓ табыңыз`,vx:(a,b,t)=>`Дене ${t} с ішінде x₀ = ${a} м нүктесінен x = ${b} м нүктесіне орын ауыстырды. vₓ проекциясын табыңыз`,x:(a,v,t)=>`Қозғалыс заңы: x = ${a} ${v<0?'−':'+'} ${Math.abs(v)}·t (м). ${t} с-тан кейінгі координатасын табыңыз`,xm:(a,v,t)=>`Жаяу жүргінші: x₀ = ${a} м, vₓ = ${v} м/с. ${t} мин-тан кейінгі координатасын табыңыз`,cl:n=>`Дене ұзындығы ${n} м тұйық траекториямен стадионды айналып, бастапқы нүктеге оралды. Орын ауыстыруын табыңыз`,a2:(l,v1,v2)=>`Пойыз барар жолда ${l} км-ді ${v1} км/сағ, қайтар жолда ${l} км-ді ${v2} км/сағ жылдамдықпен жүрді. Орташа жылдамдығын табыңыз (оныншыға дейін)`,a3:(t1,v1,t2,v2)=>`Алғашқы ${t1} сағ ${v1} км/сағ, келесі ${t2} сағ ${v2} км/сағ жылдамдықпен жүрді. Орташа жылдамдығын табыңыз`,a4:(l1,t1,l2,t2)=>`Автобус ${t1} сағ-та ${l1} км, содан кейін ${t2} сағ-та ${l2} км жүрді. Барлық қозғалыс уақытындағы орташа жылдамдығын табыңыз`,a5:(l1,t1,l2,t2)=>`Автобус ${t1} сағ-та ${l1} км, содан кейін ${t2} сағ-та ${l2} км жүрді. Орташа жылдамдығын табыңыз. Жауабы м/с-пен`}};
-const ek={'эскалатор':'эскалатор','лента транспортёра':'конвейер лентасы','конец стрелки часов':'сағат тілінің ұшы','автомобиль в городе':'қаладағы автомобиль','пешеход':'жаяу жүргінші','мяч':'доп'};
-const EXS=[['эскалатор','eq'],['лента транспортёра','eq'],['конец стрелки часов','eq'],['автомобиль в городе','ne'],['пешеход','ne'],['мяч','ne']],CH1=[['eq','eq'],['ne','ne']],CHF=[['a','fa'],['b','fb']];
-const UN=k=>({kmh:'км/'+(L=='kz'?'сағ':'ч'),ms:'м/с',m:'м',s:'с'})[k],H=()=>L=='kz'?'сағ':'ч',ng=n=>n<0?`(${n})`:n,r1=x=>Math.round(x*10)/10,bi=q=>q.b>9?q.b-10:q.b,nms=()=>S.sec==2?T3[L].m:T[L].b;
-function g10(i,example){if(i<2){const e=example||pick(EXS);return{b:10,k:'ex',p:[e[0]],ans:e[1],ch:CH1,x:()=>T3[L][e[1]=='eq'?'same':'diff']}}
-const eq=Math.random()<.5,d=pick([1,2,5]),p=R(2,9)*pick([1,2]),a=eq?[p,p,p,p]:pick([[p,p+2,p+4,p+6],[p+6,p+4,p+2,p],[p,p,p+3,p],[p,p+3,p,p+3]]);return{b:10,k:'tb',p:[d,a],ans:eq?'eq':'ne',ch:CH1,x:()=>T3[L][eq?'same':'diff']}}
-function g11(k){let q;
-if(k=='v'){const v=pick([30,40,45,50,60,72,80,90]),t=pick([2,3,4,5]),l=v*t;q={p:[l,t],ans:v,u:'kmh',x:()=>`v = l / t = ${l} / ${t} = ${v} ${UN('kmh')}`}}
-else if(k=='c1'){const v=pick([18,36,54,72,90,108]),a=cl(v/3.6);q={p:[v],ans:a,u:'ms',x:()=>`1 м/с = 3,6 ${UN('kmh')}; ${v} : 3,6 = ${fmt(a)} м/с`}}
-else if(k=='c2'){const m=pick([5,10,15,20,25,30]),a=cl(m*3.6);q={p:[m],ans:a,u:'kmh',x:()=>`1 м/с = 3,6 ${UN('kmh')}; ${m} · 3,6 = ${fmt(a)} ${UN('kmh')}`}}
-else if(k=='l'){const v=pick([3.6,7.2,18,36,54,72]),t=pick([2,5,10]),m=cl(v/3.6),a=cl(m*t*60);q={p:[v,t],ans:a,u:'m',x:()=>`v = ${fmt(v)} ${UN('kmh')} : 3,6 = ${fmt(m)} м/с; t = ${t} мин = ${t*60} с; l = v · t = ${fmt(m)} · ${t*60} = ${fmt(a)} м`}}
-else{const v=pick([5,10,20,25]),l=pick([1,2,3,5]),a=l*1000/v;q={p:[v,l],ans:a,u:'s',x:()=>`l = ${l} км = ${l*1000} м; t = l / v = ${l*1000} / ${v} = ${a} с`}}
-q.b=11;q.k=k;return q}
-function g12(k){let q;
-if(k=='sx'){const a=R(-10,20);let b=R(-10,30);if(b==a)b++;q={p:[a,b],ans:b-a,u:'m',x:()=>`sₓ = x − x₀ = ${b} − ${ng(a)} = ${b-a}`}}
-else if(k=='vx'){const v=pick([-4,-3,-2,2,3,5]),t=pick([2,4,5,10]),a=R(-5,20),b=a+v*t;q={p:[a,b,t],ans:v,u:'ms',x:()=>`sₓ = ${b} − ${ng(a)} = ${b-a}; vₓ = sₓ / t = ${b-a} / ${t} = ${v}`}}
-else if(k=='x'){const a=R(-10,20),v=pick([-5,-4,-3,-2,2,3,4]),t=pick([2,3,4,5]),r=a+v*t;q={p:[a,v,t],ans:r,u:'m',x:()=>`x = x₀ + vₓ · t = ${a} + ${ng(v)} · ${t} = ${r}`}}
-else if(k=='xm'){const a=pick([50,100,200]),v=pick([-1,-2,-3]),t=pick([1,2,3]),r=a+v*t*60;q={p:[a,v,t],ans:r,u:'m',x:()=>`t = ${t} мин = ${t*60} с; x = ${a} + ${ng(v)} · ${t*60} = ${r}`}}
-else{q={p:[pick([200,400,500])],ans:0,u:'m',x:()=>T3[L].cl0}}
-q.b=12;q.k=k;return q}
-const A2=[[120,60,40],[90,30,45],[180,90,60],[60,20,30],[150,50,75],[300,100,50]],A3=[[2,100,2,50],[1,60,3,40],[2,30,3,50],[3,60,1,100],[2,80,2,40],[4,50,1,100]],A4=[[190,4,75,1],[120,2,180,3],[90,2,110,3],[50,1,100,3],[210,3,60,2],[160,4,120,1]],A5=[[210,3,60,2],[180,2,180,3],[90,2,90,3]];
-function g13(k){let q;
-if(k=='a2'){const[l,v1,v2]=pick(A2),t1=l/v1,t2=l/v2,a=r1(2*l/(t1+t2));q={p:[l,v1,v2],ans:a,tol:.06,u:'kmh',x:()=>`t₁ = ${l} / ${v1} = ${fmt(t1)} ${H()}; t₂ = ${l} / ${v2} = ${fmt(t2)} ${H()}; v = ${2*l} / ${fmt(t1+t2)} ≈ ${fmt(a)} ${UN('kmh')}`}}
-else if(k=='a3'){const[t1,v1,t2,v2]=pick(A3),l1=v1*t1,l2=v2*t2,a=r1((l1+l2)/(t1+t2));q={p:[t1,v1,t2,v2],ans:a,tol:.06,u:'kmh',x:()=>`l₁ = ${v1} · ${t1} = ${l1}; l₂ = ${v2} · ${t2} = ${l2}; v = (${l1} + ${l2}) / (${t1} + ${t2}) = ${fmt(a)} ${UN('kmh')}`}}
-else if(k=='a4'||k=='a5'){const[l1,t1,l2,t2]=pick(k=='a4'?A4:A5),s=r1((l1+l2)/(t1+t2)),a=k=='a4'?s:cl(s/3.6);q={p:[l1,t1,l2,t2],ans:a,tol:.06,u:k=='a4'?'kmh':'ms',x:()=>`v = (${l1} + ${l2}) / (${t1} + ${t2}) = ${fmt(s)} ${UN('kmh')}`+(k=='a5'?`; ${fmt(s)} : 3,6 = ${fmt(a)} м/с`:'')}}
-else q={p:[],ans:'b',ch:CHF,x:()=>T3[L].fx};
-q.b=13;q.k=k;return q}
-const build2=()=>{const examples=sh(EXS);return [0,1,2,3,4,5].map(i=>g10(i,examples[i])).concat(['v','c1','c2','l','t','l'].map(g11),['sx','sx','vx','x','xm','cl'].map(g12),['a2','a2','a3','a4','a5','fm'].map(g13))};
-function txt3(q){const t=T3[L],p=q.k=='ex'&&L=='kz'?[ek[q.p[0]]]:q.p.map(x=>typeof x=='number'?fmt(x):x);return q.k=='fm'?t.fm:t[q.k](...p)}
-const atxt3=q=>q.ch?T3[L][q.ch.find(c=>c[0]==q.ans)[1]]:fmt(q.ans)+' '+UN(q.u),expl3=q=>q.x();
-function inp3(q,e){return q.ch?`<input type='hidden' id='i0'><div style='margin-top:8px'>${q.ch.map(([v,k])=>`<button class="g" onclick="pk(this,'${v}')">${T3[L][k]}</button>`).join('')}</div>`:`${e('i0')} ${UN(q.u)}`}
-function pk(b,v){$('i0').value=v;[...b.parentNode.children].forEach(x=>x.style.cssText='');b.style.background='var(--a)';b.style.color='#fff'}
-function chk3(q,v){return q.ch?v[0]==q.ans:q.tol?Math.abs(P(v[0])-q.ans)<=q.tol:close(P(v[0]),q.ans)}
-let LF=null;document.addEventListener('focusin',e=>{if(e.target.tagName=='INPUT'&&e.target.type=='text')LF=e.target});
-function ins(s){const i=LF&&document.body.contains(LF)?LF:$('i0');if(!i||i.disabled)return;const a=i.selectionStart==null?i.value.length:i.selectionStart,b=i.selectionEnd==null?a:i.selectionEnd;i.value=i.value.slice(0,a)+s+i.value.slice(b);i.focus();if(i.setSelectionRange)i.setSelectionRange(a+s.length,a+s.length)}
-function insMinus(){const i=LF&&document.body.contains(LF)&&LF.type==='text'&&!LF.disabled?LF:$('i0');if(!i||i.disabled||i.type==='hidden')return;const v=i.value.replace(/^[−–]/,'-');i.value=v.startsWith('-')?v.slice(1):'-'+v;i.focus();if(i.setSelectionRange)i.setSelectionRange(1,1)}
-function restoreAnsweredQuestion(){const t=T[L],q=S.qs[S.i],ok=!!S.lastOk,v=S.lastV||[];$('fb').innerHTML='<p class="'+(ok?'ok':'no')+'">'+(ok?t.ok:t.bad+atxt(q))+'</p>'+(S.hints&&!ok?'<div class="ex">'+expl(q)+'</div>':'');const b=$('bt');b.textContent=t.nx;b.onclick=()=>{S.i++;show()};[0,1].forEach(j=>{if($('i'+j)){if(j<v.length)$('i'+j).value=v[j];$('i'+j).disabled=true}})}
-document.addEventListener('keydown',e=>{if(e.key=='Enter'){const b=$('bt');if(b)b.click()}});home();
+<!DOCTYPE html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Тренажёр</title></head><body><script>
+(async()=>{
+  const r=await fetch('./app.html?v=contrast-20261020',{cache:'no-store'});
+  let html=await r.text();
+  const css=`<style id="contrast-hotfix">
+  :root{--bg:#e8eef7!important;--t:#111827!important;--m:#111827!important;--line:#94a3b8!important}
+  body{background:linear-gradient(180deg,#dfe7f2 0%,#eef2f7 100%)!important;color:#111827!important}
+  .card{border:2px solid #a8b6ca!important;box-shadow:0 16px 38px rgba(30,41,59,.14)!important}
+  .home-card{background:#f8fafc!important;border-color:#94a3b8!important}
+  .home-card h2{color:#0f172a!important}
+  .s{color:#1f2937!important;font-weight:700!important}
+  .home-card label{background:#cbd5e1!important;border:1.5px solid #94a3b8!important;color:#0f172a!important;font-weight:700!important}
+  .home-card #nm,input[type=text]{background:#fff!important;border:2px solid #64748b!important;color:#0f172a!important}
+  .home-card #nm::placeholder,input[type=text]::placeholder{color:#475569!important;opacity:1!important}
+  button.g{background:#b8c5d8!important;color:#0f172a!important;border:1.5px solid #71839f!important;font-weight:800!important}
+  .card>div[style*="text-align:right"] button.g{background:#334155!important;color:#fff!important;border-color:#334155!important}
+  .card>div[style*="text-align:right"] button.g:hover{background:#1e293b!important}
+  details{background:#d7e0ec!important;border:1.5px solid #94a3b8!important;color:#0f172a!important}
+  summary{color:#0f172a!important;font-weight:800!important}
+  th{background:#cbd8e8!important;color:#172554!important}
+  td{color:#111827!important}
+  .ex{background:#cbd8ea!important;border-color:#8fa6c6!important;color:#172554!important}
+  .bar{background:#aebdd2!important}
+  @media(max-width:420px){.home-card{padding:17px!important}.home-card label{padding:13px!important}}
+  </style>`;
+  html=html.replace('</head>',css+'</head>').replace('· v3','· v4');
+  document.open();document.write(html);document.close();
+})().catch(e=>{document.body.innerHTML='<p style="font:16px system-ui;padding:20px">Ошибка загрузки тренажёра. Обновите страницу.</p>';console.error(e)});
 </script></body></html>
